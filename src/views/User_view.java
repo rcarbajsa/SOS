@@ -1,4 +1,4 @@
-package clase.resources.BBDD;
+package views;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,14 +23,30 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import org.apache.naming.NamingContext;
-@Path("Hol")
-public class Database {
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String sayPlain() {
-		return "MAX LA CHUPA";
+import resources.*;
+import controllers.*;
+@Path("user")
+public class User_view {
+//	@GET
+//	@Produces(MediaType.TEXT_PLAIN)
+//	public String sayPlain() {
+//		return "MAX LA CHUPA";
+//	}
+	//Crear nuevo usuario
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createUser(User_resource user) throws SQLException {
+		User_controller controller= new User_controller();
+		String location=controller.createUser(user);
+		if(location!="") {
+			return Response.status(Response.Status.CREATED).entity(user).
+				header("Location", location).header("Content-Location", location).build();
+		}
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No se pudo crear el garaje").build();
+		
+		
+		
 	}
 	
 }
