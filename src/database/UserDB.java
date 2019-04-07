@@ -21,24 +21,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UserDB extends Conexion {
-	@Context
-	protected UriInfo uriInfo;
-
-	protected DataSource ds;
-	protected Connection conn;
 
 	public UserDB() {
-		InitialContext ctx;
-		try {
-			ctx = new InitialContext();
-			NamingContext envCtx = (NamingContext) ctx.lookup("java:comp/env");
-			ds = (DataSource) envCtx.lookup("jdbc/FaceSOS");
-			conn = ds.getConnection();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		super();
 	}
 	
 	public int getUser(UserResource user) {
@@ -49,18 +34,6 @@ public class UserDB extends Conexion {
 	}
 	
 	public int createUser(UserResource user) throws SQLException {
-		InitialContext ctx;
-		try {
-			ctx = new InitialContext();
-			NamingContext envCtx = (NamingContext) ctx.lookup("java:comp/env");
-			ds = (DataSource) envCtx.lookup("jdbc/FaceSOS");
-			this.conn = ds.getConnection();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		System.out.println(this.conn);
 		String query = "INSERT INTO FaceSOS.users(name,username) VALUE ('"+user.getName()+"','"+user.getUsername()+"');";
 		PreparedStatement ps = this.conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		ps.executeUpdate();

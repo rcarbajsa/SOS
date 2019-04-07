@@ -16,7 +16,7 @@ public class Conexion {
 	protected UriInfo uriInfo;
 
 	protected DataSource ds;
-	protected Connection conn;
+	 Connection conn;
 	
 	public Conexion() {
 		InitialContext ctx;
@@ -25,6 +25,7 @@ public class Conexion {
 			NamingContext envCtx = (NamingContext) ctx.lookup("java:comp/env");
 			ds = (DataSource) envCtx.lookup("jdbc/FaceSOS");
 			this.conn = ds.getConnection();
+			System.out.println("Conexion:  "+this.conn);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
