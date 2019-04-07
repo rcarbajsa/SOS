@@ -17,13 +17,14 @@ public class Conexion {
 
 	protected DataSource ds;
 	protected Connection conn;
+	
 	public Conexion() {
 		InitialContext ctx;
 		try {
 			ctx = new InitialContext();
 			NamingContext envCtx = (NamingContext) ctx.lookup("java:comp/env");
 
-			ds = (DataSource) envCtx.lookup("jdbc/FaceSOS");
+			ds = (DataSource) envCtx.lookup("jdbc/faceSOS");
 			conn = ds.getConnection();
 		} catch (NamingException e) {
 			e.printStackTrace();

@@ -25,21 +25,40 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.FormParam;
 import org.apache.naming.NamingContext;
-import resources.*;
 import controllers.*;
+import resources.*;
 
 @Path("user")
 public class UserView {
+	
+	@GET
+	@Path("/{userId}")
+	public Response getUser(
+			@PathParam("userId") String userId) throws SQLException {
+		return new UserController().getUser(userId);
+	}
+	
 	//Crear nuevo usuario
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createUser(
-			@FormParam("name") String name,
-			@FormParam("username") String username) throws SQLException {
-		UserResource userResource = new UserResource(name, username);
-		UserController userController = new UserController(userResource);
-		Response res = userController.createUser();
-		return res;
+	public Response createUser(UserResource user) throws SQLException {
+		return new UserController().createUser(user);
 	}
 	
+	@PUT
+	@Path("/{userId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editUser(
+			@PathParam("userId") String userId,
+			@FormParam("name") String name,
+			@FormParam("username") String username) throws SQLException {
+		return new UserController().editUser(userId, name, username);
+	}
+	
+	@PUT
+	@Path("/{userId}")
+	public Response removeUser(
+			@PathParam("userId") String userId) throws SQLException {
+		return new UserController().removeUser(userId);
+	}
 }
