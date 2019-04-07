@@ -26,11 +26,17 @@ public class UserDB extends Conexion {
 		super();
 	}
 	
-	public int getUser(UserResource user) {
+	public ResultSet getUser(UserResource user) throws SQLException {
 		if(this.conn != null) {
-			
+			String query = "SELECT name FROM `faceSOS`.`users` WHERE `user_id` = ?;";
+			PreparedStatement ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, Integer.parseInt(user.getId()));
+			ps.executeQuery();
+			ResultSet rs = ps.getGeneratedKeys();
+			System.out.println("GETEaaaT");
+			return rs;
 		}
-		return -1;
+		return null;
 	}
 	
 	public int createUser(UserResource user) throws SQLException {
