@@ -12,14 +12,13 @@ public class UserResource {
 	private ArrayList<UserResource> friends;
 	
 	
-	public UserResource(String username, String name) {
-		this.username = username;
+	public UserResource(String name, String username) {
 		this.name = name;
 		this.posts=new ArrayList<PostResource>();
 		this.friends=new ArrayList<UserResource>();
-		
+		this.username = username;
 	}
-	
+
 	@XmlAttribute(required=false)
 	public int getId() {
 		return this.id;
