@@ -36,10 +36,15 @@ public class UserView {
 	public Response createUser(
 			@FormParam("name") String name,
 			@FormParam("username") String username) throws SQLException {
+		try {
 		UserResource userResource = new UserResource(name, username);
 		UserController userController = new UserController(userResource);
 		Response res = userController.createUser();
 		return res;
+		}
+		catch(SQLException e) {
+			
+		}
 	}
 	
 }

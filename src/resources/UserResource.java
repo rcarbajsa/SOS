@@ -26,5 +26,11 @@ public class UserResource {
 	public void setId(int id) {
 		this.id=id;
 	}
+	public String getUsername() {
+		return this.username;
+	}
+	public String getName() {
+		return this.name;
+	}
 	
 }
