@@ -9,11 +9,11 @@ public class UserResource {
 	private String username;
 	private String name;
 	
-	public UserResource(String username, String name) {
-		this.username = username;
+	public UserResource(String name, String username) {
 		this.name = name;
+		this.username = username;
 	}
-	
+
 	@XmlAttribute(required=false)
 	public int getId() {
 		return this.id;
