@@ -32,9 +32,10 @@ public class UserController   {
 
 	public Response createUser(UserResource user) throws SQLException {
 		UserDB db = new UserDB();
-		int id = db.createUser(this.user);
+		
+		int id = db.createUser(user);
 		if(id > 0) {
-			String location = uriInfo.getAbsolutePath() + "/" + id;
+			int location = /*uriInfo.getAbsolutePath() + "/" +*/ id;
 			return Response.status(Response.Status.CREATED).entity(user).
 				header("Location", location).header("Content-Location", location).build();
 		}

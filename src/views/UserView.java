@@ -42,6 +42,8 @@ public class UserView {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createUser(UserResource user) throws SQLException {
+		System.out.println(user.getName());
+		System.out.println("------------------------------------");
 		return new UserController().createUser(user);
 	}
 	

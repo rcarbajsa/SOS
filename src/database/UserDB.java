@@ -6,6 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
+
+import org.apache.naming.NamingContext;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,8 +21,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UserDB extends Conexion {
+	@Context
+	protected UriInfo uriInfo;
+
+	protected DataSource ds;
+	protected Connection conn;
+
 	public UserDB() {
-		super();
+		InitialContext ctx;
+		try {
+			ctx = new InitialContext();
+			NamingContext envCtx = (NamingContext) ctx.lookup("java:comp/env");
+			ds = (DataSource) envCtx.lookup("jdbc/FaceSOS");
+			conn = ds.getConnection();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public int getUser(UserResource user) {
@@ -25,15 +49,24 @@ public class UserDB extends Conexion {
 	}
 	
 	public int createUser(UserResource user) throws SQLException {
-		String query = "INSERT INTO faceSOS.users(name,username) VALUE (?,?);";
-		PreparedStatement ps = this.conn.prepareStatement(query);
-		ps.setString(0, user.getName());
-		ps.setString(1, user.getUsername());
-		ps.executeQuery();
+		InitialContext ctx;
+		try {
+			ctx = new InitialContext();
+			NamingContext envCtx = (NamingContext) ctx.lookup("java:comp/env");
+			ds = (DataSource) envCtx.lookup("jdbc/FaceSOS");
+			this.conn = ds.getConnection();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(this.conn);
+		String query = "INSERT INTO FaceSOS.users(name,username) VALUE ('"+user.getName()+"','"+user.getUsername()+"');";
+		PreparedStatement ps = this.conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+		ps.executeUpdate();
 		ResultSet rs = ps.getGeneratedKeys();
 		if(rs.next()) {
 			int id = rs.getInt(1);
-			user.setId(id);
 			return id;
 		}
 		else {

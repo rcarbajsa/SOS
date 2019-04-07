@@ -23,14 +23,16 @@ public class Conexion {
 		try {
 			ctx = new InitialContext();
 			NamingContext envCtx = (NamingContext) ctx.lookup("java:comp/env");
-
-			ds = (DataSource) envCtx.lookup("jdbc/faceSOS");
-			conn = ds.getConnection();
+			ds = (DataSource) envCtx.lookup("jdbc/FaceSOS");
+			this.conn = ds.getConnection();
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+//	public static void main(String args[]) {
+//		Conexion a= new Conexion();
+//	}
 
 }
