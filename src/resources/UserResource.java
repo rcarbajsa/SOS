@@ -36,6 +36,12 @@ public class UserResource {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	public String getUsername() {
+		return this.username;
+	}
+	public String getName() {
+		return this.name;
+	}
 	
 	public String getName() {
 		return this.name;

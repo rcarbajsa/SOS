@@ -7,9 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 public class UserController   {
+	
+	@Context
+	private UriInfo uriInfo;
+	private UserResource user;
+	
 	public UserController() {}
 	
 	public Response getUser(String userId) throws SQLException {
@@ -25,8 +32,9 @@ public class UserController   {
 
 	public Response createUser(UserResource user) throws SQLException {
 		UserDB db = new UserDB();
-		int location = db.createUser(user);
-		if(location > 0) {
+		int id = db.createUser(this.user);
+		if(id > 0) {
+			String location = uriInfo.getAbsolutePath() + "/" + id;
 			return Response.status(Response.Status.CREATED).entity(user).
 				header("Location", location).header("Content-Location", location).build();
 		}
