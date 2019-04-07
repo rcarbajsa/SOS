@@ -27,7 +27,7 @@ import org.apache.naming.NamingContext;
 import resources.*;
 import controllers.*;
 @Path("user")
-public class User_view {
+public class UserView {
 //	@GET
 //	@Produces(MediaType.TEXT_PLAIN)
 //	public String sayPlain() {

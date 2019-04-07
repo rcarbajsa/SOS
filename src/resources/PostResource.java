@@ -1,11 +1,11 @@
 package resources;
 
-public class Post {
+public class PostResource {
 	private int id;
 	private String content;
 	//private date createdAt;
 	//private date updatedAt;
-	public Post(String content) {
+	public PostResource(String content) {
 		this.content=content;
 	}
 }

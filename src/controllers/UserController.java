@@ -7,10 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class User_controller   {
+public class UserController   {
 
-	public String createUser(User_resource user)throws SQLException{
-		User_db db=new User_db();
+	public String createUser(UserResource user)throws SQLException{
+		UserDB db=new UserDB();
 		String location=db.createUser(user);
 		return location;
 	}
