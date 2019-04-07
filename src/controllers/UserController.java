@@ -22,12 +22,17 @@ public class UserController   {
 	public Response getUser(String userId) throws SQLException {
 		UserResource user = new UserResource(userId);
 		UserDB db = new UserDB();
-		int i = db.getUser(user);
-		if(i > 0) {
+		ResultSet rs = db.getUser(user);
+		rs.beforeFirst();
+		if(rs != null && rs.next()) {
+			System.out.println("HOLAsoy el primer:");
+			System.out.println("HOLA: " + rs.getString("name"));
+			int i = rs.getInt(1);
+			System.out.println("HOLA " + rs.getString(1));
 			return Response.status(Response.Status.CREATED).entity(user).
 				header("Location", i).header("Content-Location", i).build();
 		}
-		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to create user").build();
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to get user information").build();
 	}
 
 	public Response createUser(UserResource user) throws SQLException {
