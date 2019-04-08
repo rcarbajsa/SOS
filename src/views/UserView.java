@@ -19,6 +19,7 @@ import resources.UserResource;
 
 @Path("user")
 public class UserView {
+	
 	@Context
 	private UriInfo uriInfo;
 	

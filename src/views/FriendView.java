@@ -3,7 +3,6 @@ package views;
 import javax.ws.rs.Path;
 import java.sql.SQLException;
 
-import javax.enterprise.inject.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -18,7 +17,7 @@ import controllers.ChatController;
 import controllers.FriendController;
 import resources.ChatResource;
 
-@Path("user/{idUser}/")
+@Path("uaser/{idUser}")
 public class FriendView {
 	
 	@Context
@@ -27,10 +26,13 @@ public class FriendView {
 	
 	//Add friend
 	@PUT
-	@Path("friend/add/{idFriend}")
+	@Path("/friend/add/{idFriend}")
 	//@Produces(MediaType.APPLICATION_JSON)
-	public Response addFriend(@PathParam("idUser")String idUser, @PathParam("idFriend") String idFriend) throws SQLException {
-		return new FriendController(uriInfo).addFriend(idUser,idFriend);
+	public Response addFriend(
+			@PathParam("userId")String userId,
+			@PathParam("friendId") String friendId) 
+					throws SQLException {
+		return new FriendController(uriInfo).addFriend(userId,friendId);
 	}
 
 }

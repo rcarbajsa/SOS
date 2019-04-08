@@ -25,7 +25,6 @@ public class FriendController {
 		ResultSet rs = db_get.getUser(user);
 		db.addFriend(idUser,idFriend);
 		if(rs != null && rs.next()) {
-			System.out.println();
 			user.setName(rs.getString("name"));
 			user.setUsername(rs.getString("username"));
 			String location = "http://localhost:8080/SOS/api/user/" + idFriend;

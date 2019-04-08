@@ -9,12 +9,12 @@ public class UserResource {
 	private String username;
 	private String name;
 	
+	public UserResource() {}
+	
 	public UserResource(String name, String username) {
 		this.name = name;
 		this.username = username;
 	}
-	
-	public UserResource() {}
 
 	public UserResource(String userId) {
 		this.userId = Integer.parseInt(userId);
@@ -31,6 +31,13 @@ public class UserResource {
 		return this.userId;
 	}
 	
+	public String getUsername() {
+		return this.username;
+	}
+	public String getName() {
+		return this.name;
+	}
+	
 	public void setId(String userId) {
 		this.userId = Integer.parseInt(userId);
 	}
@@ -41,12 +48,5 @@ public class UserResource {
 	
 	public void setUsername(String username) {
 		this.username = username;
-	}
-	
-	public String getUsername() {
-		return this.username;
-	}
-	public String getName() {
-		return this.name;
 	}
 }

@@ -20,7 +20,7 @@ public class FriendDB extends Conexion{
 	
 	public boolean checkFriends(String idUser, String idFriend) throws SQLException {
 		
-		String query = "Select * from faceSOS.friends where user_id= ? and friend_id = ?;";
+		String query = "SELECT * FROM `faceSOS`.`friends` WHERE user_id=  ? AND friend_id = ?;";
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setString(1, idUser);
 		ps.setString(2, idFriend);
@@ -33,7 +33,7 @@ public class FriendDB extends Conexion{
 	}
 	
 	public void addFriend(String idUser, String idFriend) throws SQLException {
-		String query = "Insert into faceSOS.friends(user_id,friend_id) values(?,?);";
+		String query = "INSERT INTO `faceSOS`.`friends` (user_id,friend_id) VALUES (?,?);";
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setString(1, idUser);
 		ps.setString(2, idFriend);
