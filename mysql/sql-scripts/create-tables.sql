@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS `friends` (
   `friend_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`user_id`,`friend_id`),
   KEY `FK_FRIENDS_2` (`friend_id`),
-  CONSTRAINT `FK_FRIENDS_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FK_FRIENDS_2` FOREIGN KEY (`friend_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `FK_FRIENDS_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_FRIENDS_2` FOREIGN KEY (`friend_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 

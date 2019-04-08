@@ -21,6 +21,7 @@ import resources.UserResource;
 
 @Path("/user")
 public class UserView {
+	
 	@Context
 	private UriInfo uriInfo;
 	
@@ -30,6 +31,12 @@ public class UserView {
 			@PathParam("userId") String userId) throws SQLException {
 		System.out.println("aaaaaaaaa");
 		return new UserController(this.uriInfo).getUser(userId);
+	}
+	
+	@GET
+	public Response getUsers(
+			@QueryParam("name") @DefaultValue("") String name) throws SQLException {
+		return new UserController(this.uriInfo).getUsers(name);
 	}
 	
 	@POST

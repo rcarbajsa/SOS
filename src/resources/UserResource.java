@@ -8,13 +8,14 @@ public class UserResource {
 	private int userId;
 	private String username;
 	private String name;
+	private String location;
+	
+	public UserResource() {}
 	
 	public UserResource(String name, String username) {
 		this.name = name;
 		this.username = username;
 	}
-	
-	public UserResource() {}
 
 	public UserResource(String userId) {
 		this.userId = Integer.parseInt(userId);
@@ -25,10 +26,28 @@ public class UserResource {
 		this.name = name;
 		this.username = username;
 	}
+	
+	public UserResource(int userId, String name, String username) {
+		this.userId = userId;
+		this.name = name;
+		this.username = username;
+	}
 
 	@XmlAttribute(required=false)
 	public int getId() {
 		return this.userId;
+	}
+	
+	public String getUsername() {
+		return this.username;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public String getLocation() {
+		return this.location;
 	}
 	
 	public void setId(String userId) {
@@ -43,10 +62,7 @@ public class UserResource {
 		this.username = username;
 	}
 	
-	public String getUsername() {
-		return this.username;
-	}
-	public String getName() {
-		return this.name;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }

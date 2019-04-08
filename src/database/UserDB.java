@@ -43,27 +43,39 @@ public class UserDB extends Conexion {
 		return null;
 	}
 	
-	public ResultSet editUser(UserResource user) throws SQLException {
+	public int editUser(UserResource user) throws SQLException {
 		if(this.conn != null) {
 			String query = "UPDATE `faceSOS`.`users` SET name = ? WHERE user_id = ?;";
-			PreparedStatement ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, user.getName());
 			ps.setInt(2, user.getId());
-			ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
-			System.out.println(rs);
-			return rs;
+			return ps.executeUpdate();
 		}
-		return null;
+		return -1;
 	}
 	
-	public ResultSet removeUser(UserResource user) throws SQLException {
+	public int removeUser(UserResource user) throws SQLException {
 		if(this.conn != null) {
 			String query = "DELETE FROM `faceSOS`.`users` WHERE user_id = ?;";
-			PreparedStatement ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setInt(1, user.getId());
-			ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
+			return ps.executeUpdate();
+		}
+		return -1;
+	}
+	
+	public ResultSet getUsers(String name) throws SQLException {
+		if(this.conn != null) {
+			PreparedStatement ps;
+			if(name.equals("")) {
+				String query = "SELECT * FROM `faceSOS`.`users`";
+				ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			} else {
+				String query = "SELECT * FROM `faceSOS`.`users` WHERE name LIKE ?;";
+				ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, "%" + name + "%");
+			}
+			ResultSet rs = ps.executeQuery();
 			return rs;
 		}
 		return null;
