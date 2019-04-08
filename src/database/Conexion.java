@@ -16,24 +16,19 @@ public class Conexion {
 	protected UriInfo uriInfo;
 
 	protected DataSource ds;
-	 Connection conn;
+	protected Connection conn;
 	
 	public Conexion() {
-		InitialContext ctx;
 		try {
-			ctx = new InitialContext();
+			InitialContext ctx = new InitialContext();
 			NamingContext envCtx = (NamingContext) ctx.lookup("java:comp/env");
-			ds = (DataSource) envCtx.lookup("jdbc/FaceSOS");
-			this.conn = ds.getConnection();
-			System.out.println("Conexion:  "+this.conn);
+			ds = (DataSource) envCtx.lookup("jdbc/faceSOS");
+			conn = ds.getConnection();
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-//	public static void main(String args[]) {
-//		Conexion a= new Conexion();
-//	}
 
 }

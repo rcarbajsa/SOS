@@ -30,21 +30,21 @@ import resources.*;
 
 @Path("user")
 public class UserView {
+	@Context
+	private UriInfo uriInfo;
 	
 	@GET
 	@Path("/{userId}")
 	public Response getUser(
 			@PathParam("userId") String userId) throws SQLException {
-		return new UserController().getUser(userId);
+		return new UserController(this.uriInfo).getUser(userId);
 	}
 	
 	//Crear nuevo usuario
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createUser(UserResource user) throws SQLException {
-		System.out.println(user.getName());
-		System.out.println("------------------------------------");
-		return new UserController().createUser(user);
+		return new UserController(this.uriInfo).createUser(user);
 	}
 	
 	@PUT
@@ -52,15 +52,15 @@ public class UserView {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editUser(
 			@PathParam("userId") String userId,
-			@FormParam("name") String name,
-			@FormParam("username") String username) throws SQLException {
-		return new UserController().editUser(userId, name, username);
+			UserResource user) throws SQLException {
+		return new UserController(this.uriInfo).editUser(userId, user);
 	}
 	
-	@PUT
+	@DELETE
 	@Path("/{userId}")
 	public Response removeUser(
 			@PathParam("userId") String userId) throws SQLException {
-		return new UserController().removeUser(userId);
+		System.out.println("DELETE");
+		return new UserController(this.uriInfo).removeUser(userId);
 	}
 }
