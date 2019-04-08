@@ -1,102 +1,73 @@
 package controllers;
-
+import database.*;
+import resources.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import database.UserDB;
-import resources.UserResource;
-
 public class UserController   {
+	
+	@Context
 	private UriInfo uriInfo;
 	
-	public UserController(UriInfo uriInfo) {
-		this.uriInfo = uriInfo;
-	}
-	
+	public UserController() {}
 	
 	public Response getUser(String userId) throws SQLException {
 		UserResource user = new UserResource(userId);
 		UserDB db = new UserDB();
 		ResultSet rs = db.getUser(user);
+		rs.beforeFirst();
+		System.out.println(rs != null);
+		System.out.println(rs.next());
 		if(rs != null && rs.next()) {
-			System.out.println();
-			user.setName(rs.getString("name"));
-			user.setUsername(rs.getString("username"));
-			String location = this.uriInfo.getAbsolutePath() + "/user/" + userId;
-			return Response
-					.status(Response.Status.CREATED)
-					.entity(user)
-					.header("Location", location)
-					.header("Content-Location", location)
-					.build();
+			System.out.println("HOLAsoy el primer:");
+			System.out.println("HOLA: " + rs.getString("name"));
+			int i = rs.getInt(1);
+			System.out.println("HOLA " + rs.getString(1));
+			return Response.status(Response.Status.CREATED).entity(user).
+				header("Location", i).header("Content-Location", i).build();
 		}
-		// Error message should be an object
-		return Response
-				.status(Response.Status.INTERNAL_SERVER_ERROR)
-				.entity("Unable to get user information")
-				.build();
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to get user information").build();
 	}
 
 	public Response createUser(UserResource user) throws SQLException {
 		UserDB db = new UserDB();
+		
 		ResultSet rs = db.createUser(user);
 		if(rs != null && rs.next()) {
 			user.setId(rs.getString(1));
-			String location = this.uriInfo.getAbsolutePath() + "/user/" + user.getId();
-			return Response
-					.status(Response.Status.CREATED)
-					.entity(user)
-					.header("Location", location)
-					.header("Content-Location", location)
-					.build();
+			String location = /*uriInfo.getAbsolutePath() + "/" + */user.getId();
+			return Response.status(Response.Status.CREATED).entity(user).
+				header("Location", location).header("Content-Location", location).build();
 		}
-		return Response
-				.status(Response.Status.INTERNAL_SERVER_ERROR)
-				.entity("Unable to create user")
-				.build();
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to create user").build();
 	}
 	
-	public Response editUser(String userId, UserResource user) throws SQLException {
-		user.setId(userId);
+	public Response editUser(String userId, String name, String username) throws SQLException {
+		UserResource user = new UserResource(userId, name, username);
 		UserDB db = new UserDB();
-		ResultSet rs = db.editUser(user);
-		System.out.println(rs.next());
-		if(rs != null && rs.next()) {
-			String location = this.uriInfo.getAbsolutePath() + "/user/" + user.getId();
-			return Response
-					// TODO check Status.ACCEPTED ???
-					.status(Response.Status.ACCEPTED)
-					.entity(user)
-					.header("Location", location)
-					.header("Content-Location", location)
-					.build();
+		int i = db.editUser(user);
+		if(i > 0) {
+			return Response.status(Response.Status.CREATED).entity(user).
+				header("Location", i).header("Content-Location", i).build();
 		}
-		return Response
-				.status(Response.Status.INTERNAL_SERVER_ERROR)
-				.entity("Unable to create user")
-				.build();
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to create user").build();
 	}
 	
 	public Response removeUser(String userId) throws SQLException {
 		UserResource user = new UserResource(userId);
 		UserDB db = new UserDB();
-		ResultSet rs = db.removeUser(user);
-		if(rs != null && rs.next()) {
-			String location = this.uriInfo.getAbsolutePath() + "/user/" + user.getId();
-			return Response
-					// TODO check Status.ACCEPTED ???
-					.status(Response.Status.ACCEPTED)
-					.entity(user)
-					.header("Location", location)
-					.header("Content-Location", location)
-					.build();
+		int i = db.removeUser(user);
+		if(i > 0) {
+			return Response.status(Response.Status.CREATED).entity(user).
+				header("Location", i).header("Content-Location", i).build();
 		}
-		return Response
-				.status(Response.Status.INTERNAL_SERVER_ERROR)
-				.entity("Unable to create user")
-				.build();
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to create user").build();
 	}
 }

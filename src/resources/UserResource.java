@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "user")
 public class UserResource {
-	private int userId;
+	private String userId;
 	private String username;
 	private String name;
 	
@@ -20,22 +20,22 @@ public class UserResource {
 	public UserResource() {}
 
 	public UserResource(String userId) {
-		this.userId = Integer.parseInt(userId);
+		this.userId = userId;
 	}
 	
 	public UserResource(String userId, String name, String username) {
-		this.userId = Integer.parseInt(userId);
+		this.userId = userId;
 		this.name = name;
 		this.username = username;
 	}
 
 	@XmlAttribute(required=false)
-	public int getId() {
+	public String getId() {
 		return this.userId;
 	}
 	
-	public void setId(String userId) {
-		this.userId = Integer.parseInt(userId);
+	public void setId(String id) {
+		this.userId = id;
 	}
 	
 	public void setName(String name) {
