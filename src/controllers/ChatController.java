@@ -17,10 +17,13 @@ public class ChatController {
 		this.uriInfo = uriInfo;
 	}
 	
-	public Response sendChat(String senderUserId, String receiverUserId, ChatResource chat) throws SQLException {
+	public Response sendChat(
+			String senderUserId, 
+			String receiverUserId, 
+			ChatResource chat) throws SQLException {
+		
 		if(senderUserId.equals(receiverUserId)) {
 			return Response
-					// Must be other error
 					.status(Response.Status.BAD_REQUEST)
 					.entity("User cannot send a chat to itself")
 					.build();
