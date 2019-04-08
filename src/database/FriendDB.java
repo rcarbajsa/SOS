@@ -20,10 +20,12 @@ public class FriendDB extends Conexion{
 	
 	public boolean checkFriends(String idUser, String idFriend) throws SQLException {
 		
-		String query = "Select * from faceSOS.friends where user_id= ? and friend_id = ?;";
+		String query = "Select * from faceSOS.friends where (user_id= ? and friend_id=?) or (user_id= ? and friend_id=?);";
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setString(1, idUser);
 		ps.setString(2, idFriend);
+		ps.setString(4, idUser);
+		ps.setString(3, idFriend);
 		ResultSet rs=ps.executeQuery();
 		if(rs.next())
 			return true;
@@ -37,6 +39,16 @@ public class FriendDB extends Conexion{
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setString(1, idUser);
 		ps.setString(2, idFriend);
+		ps.executeUpdate();
+		
+	}
+	public void removeFriend(String idUser, String idFriend) throws SQLException {
+		String query = "Delete from faceSOS.friends where (user_id= ? and friend_id=?) or (user_id= ? and friend_id=?);";
+		PreparedStatement ps = this.conn.prepareStatement(query);
+		ps.setString(1, idUser);
+		ps.setString(2, idFriend);
+		ps.setString(4, idUser);
+		ps.setString(3, idFriend);
 		ps.executeUpdate();
 		
 	}

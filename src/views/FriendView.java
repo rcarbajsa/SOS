@@ -18,7 +18,7 @@ import controllers.ChatController;
 import controllers.FriendController;
 import resources.ChatResource;
 
-@Path("user/{idUser}/")
+@Path("friend/{idUser}")
 public class FriendView {
 	
 	@Context
@@ -27,10 +27,18 @@ public class FriendView {
 	
 	//Add friend
 	@PUT
-	@Path("friend/add/{idFriend}")
+	@Path("/add/{idFriend}")
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response addFriend(@PathParam("idUser")String idUser, @PathParam("idFriend") String idFriend) throws SQLException {
 		return new FriendController(uriInfo).addFriend(idUser,idFriend);
+	}
+	
+	//Remove friend
+	@PUT
+	@Path("/remove/{idFriend}")
+	//@Produces(MediaType.APPLICATION_JSON)
+	public Response removeFriend(@PathParam("idUser")String idUser, @PathParam("idFriend") String idFriend) throws SQLException {
+		return new FriendController(uriInfo).removeFriend(idUser,idFriend);
 	}
 
 }

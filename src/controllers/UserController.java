@@ -2,6 +2,8 @@ package controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -64,7 +66,8 @@ public class UserController   {
 		UserDB db = new UserDB();
 		ResultSet rs = db.editUser(user);
 		System.out.println(rs.next());
-		if(rs != null && rs.next()) {
+		if(rs.next()) {
+			System.out.println("aaaaaaa");
 			String location = this.uriInfo.getAbsolutePath() + "/user/" + user.getId();
 			return Response
 					// TODO check Status.ACCEPTED ???
@@ -99,4 +102,37 @@ public class UserController   {
 				.entity("Unable to create user")
 				.build();
 	}
+	
+	public Response getFriends(String name,int count,String userId) throws SQLException {
+		//UserResource user = new UserResource(userId);
+		HashMap <String,Object> rs = new HashMap <String,Object>();
+		UserDB db = new UserDB();
+		ResultSet resultSet = db.getFriends(name,count,userId);
+		try {
+			ArrayList<UserResource> list= new ArrayList<UserResource>();
+			while(resultSet.next()) {
+				UserResource user = new UserResource();
+				user.setName(resultSet.getString("name"));
+				user.setId(resultSet.getString("friend_id"));
+				user.setUsername(resultSet.getString("username"));
+				list.add(user);
+			}
+			rs.put("data", list);
+			rs.put("n_amigos",list.size());
+			return Response
+				.status(Response.Status.CREATED)
+				.entity(rs)
+				.build();
+		
+		}
+		catch(SQLException e){
+		// Error message should be an object
+			return Response
+				.status(Response.Status.INTERNAL_SERVER_ERROR)
+				.entity("Unable to get user information")
+				.build();
+		}
+	}
+
+	
 }
