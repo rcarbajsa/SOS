@@ -2,8 +2,8 @@ package views;
 
 import java.sql.SQLException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
 
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -14,8 +14,9 @@ import javax.ws.rs.core.UriInfo;
 import controllers.ChatController;
 import resources.ChatResource;
 
-@Path("fromUser/{senderUserId}/toUser/{receiverUserId}")
+@Path("/chat/fromUser/{senderUserId}/toUser/{receiverUserId}")
 public class ChatView {
+	
 	@Context
 	private UriInfo uriInfo;
 
