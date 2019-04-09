@@ -100,7 +100,6 @@ public class UserDB extends Conexion {
 			ps.setString(1, userId);
 			int i = 2;
 			if (!name.equals("") ) {
-				System.out.println("a");
 				name+="%";
 				ps.setString(i, name);
 				i++;

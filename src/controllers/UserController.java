@@ -88,7 +88,7 @@ public class UserController   {
 		UserDB db = new UserDB();
 		ResultSet rs = db.createUser(user);
 		
-		if(rs != null && rs.next()) {
+		if(rs.next()) {
 			
 			// Prepare data to send back to client
 			user.setId(rs.getString(1));
