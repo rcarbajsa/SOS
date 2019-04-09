@@ -29,7 +29,6 @@ public class UserView {
 	@Path("/{userId}")
 	public Response getUser(
 			@PathParam("userId") String userId) throws SQLException {
-		System.out.println("aaaaaaaaa");
 		return new UserController(this.uriInfo).getUser(userId);
 	}
 	

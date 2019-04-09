@@ -18,43 +18,35 @@ public class PostDB extends Conexion{
 		super();
 	}
 	
-	public ResultSet postMessage(String user_id,PostResource post) throws SQLException {
-		// TODO: unique username value. If already exists, then error
+	public ResultSet createPost(PostResource post) throws SQLException {
 		if(this.conn != null) {
 			String query = "INSERT INTO `faceSOS`.`posts`(user_id,content) VALUE (?,?);";
 			PreparedStatement ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, user_id);
+			ps.setInt(1, post.getUserId());
 			ps.setString(2, post.getContent());
 			ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
-
-			return rs;
+			return ps.getGeneratedKeys();
 		}
 		return null;
 	}
-	public int deleteMessage(String user_id,String post_id) throws SQLException {
-		// TODO: unique username value. If already exists, then error
+	public int deletePost(PostResource post) throws SQLException {
 		if(this.conn != null) {
-			String query = "DELETE FROM`faceSOS`.`posts` WHERE user_id = ? AND post_id = ?;";
-			PreparedStatement ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, user_id);
-			ps.setString(2, post_id);
-			int res=ps.executeUpdate();
-			return res;
+			String query = "DELETE FROM `faceSOS`.`posts` WHERE  post_id = ? AND user_id = ?;";
+			PreparedStatement ps = this.conn.prepareStatement(query);
+			ps.setInt(1, post.getUserId());
+			ps.setInt(2, post.getPostId());
+			return ps.executeUpdate();
 		}
 		return -1;
 	}
-	public int editMessage(String user_id,String post_id,PostResource post) throws SQLException {
-		// TODO: unique username value. If already exists, then error
+	public int editPost(PostResource post) throws SQLException {
 		if(this.conn != null) {
-			System.out.println("Post: "+ post_id+" User: "+user_id);
-			String query = "UPDATE `faceSOS`.`posts` SET content = ?  WHERE user_id = ? AND post_id = ?;";
-			PreparedStatement ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			String query = "UPDATE `faceSOS`.`posts` SET content = ?  WHERE post_id = ? AND user_id = ?;";
+			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, post.getContent());
-			ps.setString(2, user_id);
-			ps.setString(3, post_id);
-			int res=ps.executeUpdate();
-			return res;
+			ps.setInt(2, post.getPostId());
+			ps.setInt(3, post.getUserId());
+			return ps.executeUpdate();
 		}
 		return -1;
 	}
