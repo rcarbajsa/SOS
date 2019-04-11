@@ -1,10 +1,13 @@
 package controllers;
 
-import java.net.URI;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
-
+import database.UserDB;
+import resources.UserResource;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
 
 public class Controller {
 	/*****************************/
@@ -19,8 +22,25 @@ public class Controller {
 		this.uriInfo = uriInfo;
 	}
 	
-	public URI getPath() {
-		return this.uriInfo.getAbsolutePath();
+	public String getPath() {
+		return this.uriInfo.getAbsolutePath().toString();
+	}
+	
+	public Response getUserInformationReponse(HashMap<String, Object> res, UserResource user) throws SQLException {
+		UserDB db = new UserDB();
+		ResultSet rs = db.getUser(user);
+		if(rs == null) {
+			return this.getInternalServerErrorResponse(res, "There was a problem. Unable to get user information");
+		} else if (!rs.next()) {
+			return this.getBadRequestResponse(res, "User " + user.getId() + " not found.");
+		} else {
+			// Prepare data to send back to client
+			user.setName(rs.getString("name"));
+			user.setUsername(rs.getString("username"));
+			user.setEmail(rs.getString("email"));
+			user.setCreatedAt(rs.getTimestamp("created_at"));
+			return this.getOkResponse(res, user, "Data loaded succesfully");
+		}
 	}
 	
 	/*

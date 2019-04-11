@@ -27,23 +27,7 @@ public class UserController extends Controller {
 		
 		// Get data from DB
 		UserResource user = new UserResource(userId);
-		UserDB db = new UserDB();
-		ResultSet rs = db.getUser(user);
-		
-		if (!rs.next()) {
-			return this.getBadRequestResponse(res, "User not found");
-		}
-		
-		if(rs != null) {
-			// Prepare data to send back to client
-			user.setName(rs.getString("name"));
-			user.setUsername(rs.getString("username"));
-			return this.getOkResponse(res, user, "Data loaded succesfully");
-		}
-
-		// Error
-		//TODO: Check why this return is dead code
-		return this.getInternalServerErrorResponse(res, "There was a problem. Unable to get user information");
+		return this.getUserInformationReponse(res, user);
 	}
 	
 	
@@ -87,14 +71,23 @@ public class UserController extends Controller {
 		// Res stores body response
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		
-		// Edit data in DB
+		user.setUsername(null);
 		user.setUserId(userId);
+		
+		// Check that user exists
+		Response userInformation = this.getUserInformationReponse(res, user);
+		if(userInformation.getStatus() != 200) {
+			return userInformation;
+		}
+		
+		// Edit data in DB
 		UserDB db = new UserDB();
 		int rowsAffected = db.editUser(user);
 		
 		if (rowsAffected > 0) {
 			// Prepare data to send back to client
-			user.setUsername(null);
+			UserResource fullUserInfo = (UserResource)((HashMap<String, Object>)userInformation.getEntity()).get("data");
+			user.join(fullUserInfo);
 			String location = this.getPath() + "/user/" + user.getId();
 			return this.getCreatedResponse(res, user, location, "Data updated succesfully");
 		} else if(rowsAffected == 0) {
@@ -150,15 +143,18 @@ public class UserController extends Controller {
 	            UserResource user = new UserResource(
 	            		rs.getInt("user_id"),
 	            		rs.getString("name"),
-	            		rs.getString("username"));
-	            user.setLocation(this.getPath() + "/" + user.getId());
+	            		rs.getString("username"),
+	            		rs.getString("email"),
+	            		rs.getString("biography"),
+	            		this.getPath(),
+	            		rs.getTimestamp("created_at"));
 	            users.add(user);
 	        }
 			
 			// Array with users
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("users", users);
-			data.put("n", users.size());
+			data.put("nUsers", users.size());
 
 			// Prepare data to send back to client
 			return this.getOkResponse(res, data, "Data loaded succesfully");
@@ -168,15 +164,22 @@ public class UserController extends Controller {
 		return this.getInternalServerErrorResponse(res, "There was a problem. Unable to get user information");
 	}
 	
-	public Response getFriends(String name,int count,String userId) throws SQLException {
+	public Response getFriends(String userId, String name, int limitTo) throws SQLException {
 		//UserResource user = new UserResource(userId);
 		HashMap <String,Object> res = new HashMap <String,Object>();
 		
+		// Check that userId exists
+		UserResource user = new UserResource(userId);
+		Response userInformationResponse = this.getUserInformationReponse(res, user);
+		if(userInformationResponse.getStatus() != 200) {
+			return userInformationResponse;
+		}
+			
 		// Get data from DB
 		UserDB db = new UserDB();
-		ResultSet rs = db.getFriends(name,count,userId);
+		ResultSet rs = db.getFriends(user, limitTo, userId);
 		
-		try {
+		if(rs != null) {
 			ArrayList<UserResource> friends = new ArrayList<UserResource>();
 			while(rs.next()) {
 				friends.add(new UserResource(
@@ -184,14 +187,15 @@ public class UserController extends Controller {
 						rs.getString("name"),
 						rs.getString("username")));
 			}
+			
 			// Array with users
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("friends", friends);
-			data.put("n", friends.size());
+			data.put("nFriends", friends.size());
 			return this.getOkResponse(res, data, "Data loaded succesfully");
 		}
-		catch(SQLException e){
-			return this.getInternalServerErrorResponse(res, "Unable to get friends information");
-		}
+		
+		// Error
+		return this.getInternalServerErrorResponse(res, "Unable to get friends information");
 	}
 }
