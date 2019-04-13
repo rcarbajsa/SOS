@@ -29,12 +29,15 @@ public class FriendDB extends Conexion{
 		return rs.next();
 	}
 	
-	public void addFriend(int idUser, int idFriend) throws SQLException {
-		String query = "INSERT INTO `faceSOS`.`friends` (user_id,friend_id) VALUES (?,?);";
+	public int addFriend(int idUser, int idFriend) throws SQLException {
+		String query = "INSERT IGNORE INTO `faceSOS`.`friends` (user_id,friend_id) VALUES (?,?);";
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setInt(1, idUser);
 		ps.setInt(2, idFriend);
 		ps.executeUpdate();
+		ps.setInt(1, idFriend);
+		ps.setInt(2, idUser);
+		return ps.executeUpdate();
 	}
 	
 	public void removeFriend(UserResource friend1, UserResource friend2) throws SQLException {

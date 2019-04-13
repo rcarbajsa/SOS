@@ -16,7 +16,7 @@ public class FriendController extends Controller{
 		super(uriInfo);
 	}
 	
-	public Response addFriend(String friend1Id,String friend2Id) throws SQLException {
+	public Response addFriend(String friend1Id,String friend2Id) throws SQLException   {
 		// Res stores body response
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		
@@ -39,19 +39,18 @@ public class FriendController extends Controller{
 		}
 		
 		FriendDB db = new FriendDB();
-		if(!db.checkFriends(friend1.getId(), friend2.getId())) {
-			UserDB userDB = new UserDB();
-			ResultSet rs = userDB.getUser(friend1);
-			db.addFriend(friend1.getId(),friend2.getId());
-			if(rs != null && rs.next()) {
-				friend1.setName(rs.getString("name"));
-				friend1.setUsername(rs.getString("username"));
-				String location = this.getPath() + "/user/" + friend2.getId();
-				this.getCreatedResponse(res, friend1, location, "Friend relation added succesfully");
-			}
+		UserDB userDB = new UserDB();
+		ResultSet rs = userDB.getUser(friend1);
+		int affected_rows = db.addFriend(friend1.getId(),friend2.getId());
+		if(rs.next() && affected_rows > 0) {
+			friend1.setName(rs.getString("name"));
+			friend1.setUsername(rs.getString("username"));
+			String location = this.getPath() + "/user/" + friend2.getId();
+			return this.getCreatedResponse(res, friend1, location, "Friend relation added succesfully");
 		}
 		// Error
 		return this.getInternalServerErrorResponse(res, "Unable to create friend relation");
+		
 	}
 	
 	public Response removeFriend(String friend1Id,String friend2Id) throws SQLException {
