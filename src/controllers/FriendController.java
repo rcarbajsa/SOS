@@ -29,7 +29,7 @@ public class FriendController extends Controller{
 		}
 		
 		UserResource friend2 = new UserResource(friend2Id);
-		Response friend2InformationResponse = this.getUserInformationReponse(res, friend1);
+		Response friend2InformationResponse = this.getUserInformationReponse(res, friend2);
 		if(friend2InformationResponse.getStatus() != 200) {
 			return friend2InformationResponse;
 		}
@@ -37,16 +37,11 @@ public class FriendController extends Controller{
 		if(friend1.getId() == friend2.getId()) {
 			return this.getBadRequestResponse(res, "You can only be friend of other user");
 		}
-		
 		FriendDB db = new FriendDB();
-		UserDB userDB = new UserDB();
-		ResultSet rs = userDB.getUser(friend1);
 		int affected_rows = db.addFriend(friend1.getId(),friend2.getId());
-		if(rs.next() && affected_rows > 0) {
-			friend1.setName(rs.getString("name"));
-			friend1.setUsername(rs.getString("username"));
+		if(affected_rows > 0) {
 			String location = this.getPath() + "/user/" + friend2.getId();
-			return this.getCreatedResponse(res, friend1, location, "Friend relation added succesfully");
+			return this.getCreatedResponse(res, friend2, location, "Friend relation added succesfully");
 		}
 		// Error
 		return this.getInternalServerErrorResponse(res, "Unable to create friend relation");

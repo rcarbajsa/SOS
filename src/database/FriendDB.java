@@ -30,7 +30,7 @@ public class FriendDB extends Conexion{
 	}
 	
 	public int addFriend(int idUser, int idFriend) throws SQLException {
-		String query = "INSERT IGNORE INTO `faceSOS`.`friends` (user_id,friend_id) VALUES (?,?);";
+		String query = "INSERT IGNORE INTO `faceSOS`.`friends` (UserID1,UserID2) VALUES (?,?);";
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setInt(1, idUser);
 		ps.setInt(2, idFriend);
