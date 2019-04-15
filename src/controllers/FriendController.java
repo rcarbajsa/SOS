@@ -12,8 +12,8 @@ import resources.UserResource;
 
 public class FriendController extends Controller{
 	
-	public FriendController(UriInfo uriInfo) {
-		super(uriInfo);
+	public FriendController() {
+		super();
 	}
 	
 	public Response addFriend(String friend1Id,String friend2Id) throws SQLException   {
@@ -40,7 +40,8 @@ public class FriendController extends Controller{
 		FriendDB db = new FriendDB();
 		int affected_rows = db.addFriend(friend1.getId(),friend2.getId());
 		if(affected_rows > 0) {
-			String location = this.getPath() + "/user/" + friend2.getId();
+			String location = "http://localhost:8080/SOS/api/user/" + friend2.getId();
+			friend2.setLocation(location);
 			return this.getCreatedResponse(res, friend2, location, "Friend relation added succesfully");
 		}
 		// Error
@@ -60,9 +61,8 @@ public class FriendController extends Controller{
 		}
 			
 		FriendDB db = new FriendDB();
-		if(db.checkFriends(friend1.getId(), friend2.getId())) {	
-			db.removeFriend(friend1, friend2);
-			// TODO getOkResponse doesnt allow location. I think is useless. Should ask teacher.
+		if(db.removeFriend(friend1, friend2) > 0) {
+			// TODO getOkResponse doesn't allow location. I think is useless. Should ask teacher.
 			// String location = "http://localhost:8080/SOS/api/user/" + idFriend;
 			// TODO Other comment: second argument should data, what about returning an array with 2 elements with location as well
 			return this.getOkResponse(res, null, "Friend relation removed succesfully");

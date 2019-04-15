@@ -174,18 +174,20 @@ public class UserController extends Controller {
 		if(userInformationResponse.getStatus() != 200) {
 			return userInformationResponse;
 		}
-			
+		
 		// Get data from DB
 		UserDB db = new UserDB();
-		ResultSet rs = db.getFriends(user, limitTo, userId);
+		ResultSet rs = db.getFriends(name, limitTo, userId);
 		
 		if(rs != null) {
 			ArrayList<UserResource> friends = new ArrayList<UserResource>();
 			while(rs.next()) {
 				friends.add(new UserResource(
-						rs.getString("friend_id"),
+						rs.getString("UserID2"),
 						rs.getString("name"),
-						rs.getString("username")));
+						rs.getString("username"),
+						//Set location
+						rs.getString("UserID2")));
 			}
 			
 			// Array with users

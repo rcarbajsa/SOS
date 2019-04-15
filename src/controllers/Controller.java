@@ -21,7 +21,7 @@ public class Controller {
 	public Controller(UriInfo uriInfo) {
 		this.uriInfo = uriInfo;
 	}
-	
+	public Controller() { }
 	public String getPath() {
 		return this.uriInfo.getAbsolutePath().toString();
 	}

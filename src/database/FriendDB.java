@@ -40,14 +40,14 @@ public class FriendDB extends Conexion{
 		return ps.executeUpdate();
 	}
 	
-	public void removeFriend(UserResource friend1, UserResource friend2) throws SQLException {
-		String query = "DELETE FROM `faceSOS`.`friends` WHERE (user_id= ? AND friend_id=?) OR (user_id= ? and friend_id=?);";
+	public int removeFriend(UserResource friend1, UserResource friend2) throws SQLException {
+		String query = "DELETE FROM `faceSOS`.`friends` WHERE (UserID1= ? AND UserID2=?) OR (UserID1= ? and UserID2=?);";
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setInt(1, friend1.getId());
 		ps.setInt(2, friend2.getId());
 		ps.setInt(4, friend1.getId());
 		ps.setInt(3, friend2.getId());
-		ps.executeUpdate();
+		return ps.executeUpdate();
 		
 	}
 }

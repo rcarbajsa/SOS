@@ -50,5 +50,31 @@ public class PostDB extends Conexion{
 		}
 		return -1;
 	}
+	public ResultSet getPost( String userId) throws SQLException {
+		if(this.conn != null) {
+			String query = "SELECT * FROM faceSOS.posts WHERE user_id = ? ORDER BY created_at DESC LIMIT 1;";
+			PreparedStatement ps = this.conn.prepareStatement(query);
+			ps.setString(1, userId);
+			return ps.executeQuery();
+		}
+		return null;
+	}
+	public ResultSet getPostFriends(String userId, String content) throws SQLException {
+		if(this.conn != null) {
+			String query = "SELECT faceSOS.posts.post_id,faceSOS.posts.user_id, faceSOS.posts.content, faceSOS.posts.created_at FROM faceSOS.posts JOIN" + 
+					" faceSOS.friends ON (faceSOS.posts.user_id=faceSOS.friends.UserID2) WHERE faceSOS.friends.UserID1= ?";
+			if(!content.equals(""))
+				query+="AND faceSOS.posts.content LIKE ?";
+			PreparedStatement ps = this.conn.prepareStatement(query);
+			ps.setString(1, userId);
+			System.out.println("-----------"+content);
+			if(!content.equals("")) {
+				content="%"+content+"%";
+				ps.setString(2, content);
+			}
+			return ps.executeQuery();
+		}
+		return null;
+	}
 
 }

@@ -83,34 +83,22 @@ public class UserDB extends Conexion {
 		return null;
 	}
 	
-	public ResultSet getFriends(UserResource user, int count, String userId) throws SQLException {
+	public ResultSet getFriends(String name, int count, String userId) throws SQLException {
 		if(this.conn != null) {
 			
-			String query = "select faceSOS.friends.friend_id,faceSOS.users.name,faceSOS.users.username from faceSOS.users join faceSOS.friends " + 
-					"on (faceSOS.users.user_id=faceSOS.friends.friend_id) where faceSOS.friends.user_id= ? "
-					+ "union select faceSOS.friends.user_id,faceSOS.users.name,faceSOS.users.username from faceSOS.users join faceSOS.friends " + 
-					"on (faceSOS.users.user_id=faceSOS.friends.user_id) where faceSOS.friends.friend_id= ? ;";
-			
-			if (!user.getName().equals(""))
-				query = "select faceSOS.friends.friend_id,faceSOS.users.name,faceSOS.users.username from faceSOS.users join faceSOS.friends " + 
-						"on (faceSOS.users.user_id=faceSOS.friends.friend_id) where faceSOS.friends.user_id= ? and faceSOS.users.name like ?"
-						+ "union select faceSOS.friends.user_id,faceSOS.users.name,faceSOS.users.username from faceSOS.users join faceSOS.friends " + 
-						"on (faceSOS.users.user_id=faceSOS.friends.user_id) where faceSOS.friends.friend_id= ? and faceSOS.users.name like ?;";
+			String query = "SELECT faceSOS.friends.UserID2,faceSOS.users.name, faceSOS.users.username FROM faceSOS.users "
+					+ "JOIN faceSOS.friends ON (faceSOS.users.user_id=faceSOS.friends.UserID2) where faceSOS.friends.UserID1= ? ";
+			if (!name.equals(""))
+				query += " and (faceSOS.users.name like ? or faceSOS.users.username like ?)";
 			if (count != 0)	
 				query += "limit ?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, userId);
-			int i = 2;
-			String name = user.getName();
-			if (!user.getName().equals("") ) {
-				name += "%";
+			int i=2;
+			if (!name.equals("")) {
+				name="%"+name+"%";
 				ps.setString(i, name);
 				i++;
-			}
-			ps.setString(i, userId);
-			i++;
-			if (!name.equals("")) {
-				name+="%";
 				ps.setString(i, name);
 				i++;
 			}

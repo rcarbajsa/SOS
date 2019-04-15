@@ -13,6 +13,7 @@ public class UserResource {
 	private String email;
 	private String biography;
 	private String location;
+	//WTF is friendsLocation?¿
 	private String friendsLocation;
 	private Timestamp createdAt;
 	
@@ -35,6 +36,12 @@ public class UserResource {
 		this.userId = Integer.parseInt(userId);
 		this.name = name;
 		this.username = username;
+	}
+	public UserResource(String userId, String name, String username,String location) {
+		this.userId = Integer.parseInt(userId);
+		this.name = name;
+		this.username = username;
+		this.location="http://localhost:8080/SOS/api/user/"+location;
 	}
 	
 	public UserResource(int userId, String name, String username, String email, String biography, String location, Timestamp createdAt) {
