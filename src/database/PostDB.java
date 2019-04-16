@@ -50,11 +50,15 @@ public class PostDB extends Conexion{
 		}
 		return -1;
 	}
-	public ResultSet getPost( String userId) throws SQLException {
+	public ResultSet getPost( String userId, String limitTo) throws SQLException {
 		if(this.conn != null) {
-			String query = "SELECT * FROM faceSOS.posts WHERE user_id = ? ORDER BY created_at DESC LIMIT 1;";
+			String query = "SELECT * FROM faceSOS.posts WHERE user_id = ? ORDER BY created_at DESC ";
+			if (!limitTo.equals(""))
+				query+="LIMIT ?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, userId);
+			if (!limitTo.equals(""))
+				ps.setString(2,limitTo);
 			return ps.executeQuery();
 		}
 		return null;
@@ -67,7 +71,6 @@ public class PostDB extends Conexion{
 				query+="AND faceSOS.posts.content LIKE ?";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, userId);
-			System.out.println("-----------"+content);
 			if(!content.equals("")) {
 				content="%"+content+"%";
 				ps.setString(2, content);

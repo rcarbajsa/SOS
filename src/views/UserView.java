@@ -34,8 +34,10 @@ public class UserView {
 	
 	@GET
 	public Response getUsers(
+			@QueryParam("limit-to") int limitTo,
+			@QueryParam("page") int page,
 			@QueryParam("name") @DefaultValue("") String name) throws SQLException {
-		return new UserController(this.uriInfo).getUsers(name);
+		return new UserController(this.uriInfo).getUsers(name, limitTo,page);
 	}
 	
 	@POST
@@ -64,9 +66,10 @@ public class UserView {
 	@Path("{userId}/friends")
 	public Response getFriends(
 			@PathParam("userId") String userId,
+			@QueryParam("page") int page,
 			@QueryParam("name") @DefaultValue("") String name,
 			@QueryParam("limit-to") int limitTo
 			) throws SQLException {
-		return new UserController(this.uriInfo).getFriends(userId, name, limitTo);
+		return new UserController(this.uriInfo).getFriends(userId, name, limitTo,page);
 	}
 }

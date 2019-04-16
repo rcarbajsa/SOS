@@ -50,9 +50,9 @@ public class PostView {
 	}
 	
 	@GET
-	public Response getMessage(
+	public Response getMessage(@QueryParam("limitTo") @DefaultValue("") String limitTo,
 			@PathParam("user_id") String userId) throws SQLException {
-		return new PostController(this.uriInfo).getMessage(userId);
+		return new PostController(this.uriInfo).getMessage(userId,limitTo);
 	}
 	@Path("/friends")
 	@GET

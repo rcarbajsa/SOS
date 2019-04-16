@@ -66,24 +66,33 @@ public class UserDB extends Conexion {
 		return -1;
 	}
 	
-	public ResultSet getUsers(String name) throws SQLException {
+	public ResultSet getUsers(String name, int limitTo, int page) throws SQLException {
 		if(this.conn != null) {
-			PreparedStatement ps;
+			String query = "SELECT * FROM `faceSOS`.`users`";
+			if(name.equals("")) 
+				query += " WHERE name LIKE ?";
+			if(limitTo!=0)
+				query+="LIMIT ?,?";
+			PreparedStatement ps = this.conn.prepareStatement(query);
+			int i=1;
 			if(name.equals("")) {
-				String query = "SELECT * FROM `faceSOS`.`users`";
-				ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			} else {
-				String query = "SELECT * FROM `faceSOS`.`users` WHERE name LIKE ?;";
-				ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, "%" + name + "%");
+				i++;
 			}
+			if(limitTo != 0) {
+				int inic = page * limitTo;
+				int fin = inic + limitTo;
+				ps.setInt(i, inic);
+				ps.setInt(i + 1, fin);
+			}
+			
 			ResultSet rs = ps.executeQuery();
 			return rs;
 		}
 		return null;
 	}
 	
-	public ResultSet getFriends(String name, int count, String userId) throws SQLException {
+	public ResultSet getFriends(String name, int count, String userId, int page) throws SQLException {
 		if(this.conn != null) {
 			
 			String query = "SELECT faceSOS.friends.UserID2,faceSOS.users.name, faceSOS.users.username FROM faceSOS.users "
@@ -91,7 +100,7 @@ public class UserDB extends Conexion {
 			if (!name.equals(""))
 				query += " and (faceSOS.users.name like ? or faceSOS.users.username like ?)";
 			if (count != 0)	
-				query += "limit ?;";
+				query += "limit ?,?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, userId);
 			int i=2;
@@ -102,8 +111,12 @@ public class UserDB extends Conexion {
 				ps.setString(i, name);
 				i++;
 			}
-			if (count != 0)
-				ps.setInt(i, count);
+			if (count != 0) {
+				int inic=page*count;
+				int fin= inic+count;
+				ps.setInt(i, inic);
+				ps.setInt(i + 1, fin);
+			}
 				
 			ResultSet rs =ps.executeQuery();
 			return rs;

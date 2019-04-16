@@ -87,13 +87,13 @@ public class PostController extends Controller{
 		// Error
 		return this.getInternalServerErrorResponse(res, "There was an error. Unable to edit message");
 	}
-	public Response getMessage( String userId)throws SQLException {
+	public Response getMessage( String userId, String limitTo)throws SQLException {
 		// Res stores body response
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		
 		// Set data in DB
 		PostDB db = new PostDB();
-		ResultSet rs= db.getPost(userId);
+		ResultSet rs= db.getPost(userId,limitTo);
 		PostResource post= new PostResource();
 		if(rs.next() ){
 			// Prepare data to send back to client

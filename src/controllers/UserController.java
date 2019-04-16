@@ -128,13 +128,13 @@ public class UserController extends Controller {
 	/*
 	 * Get basic data from userId
 	 * */
-	public Response getUsers(String name) throws SQLException {
+	public Response getUsers(String name, int limitTo, int page) throws SQLException {
 		// Res stores body response
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		
 		// Get data from DB
 		UserDB db = new UserDB();
-		ResultSet rs = db.getUsers(name);
+		ResultSet rs = db.getUsers(name,limitTo,page);
 		
 		if(rs != null) {
 			// Array with users
@@ -164,7 +164,7 @@ public class UserController extends Controller {
 		return this.getInternalServerErrorResponse(res, "There was a problem. Unable to get user information");
 	}
 	
-	public Response getFriends(String userId, String name, int limitTo) throws SQLException {
+	public Response getFriends(String userId, String name, int limitTo, int page) throws SQLException {
 		//UserResource user = new UserResource(userId);
 		HashMap <String,Object> res = new HashMap <String,Object>();
 		
@@ -177,7 +177,7 @@ public class UserController extends Controller {
 		
 		// Get data from DB
 		UserDB db = new UserDB();
-		ResultSet rs = db.getFriends(name, limitTo, userId);
+		ResultSet rs = db.getFriends(name, limitTo, userId, page);
 		
 		if(rs != null) {
 			ArrayList<UserResource> friends = new ArrayList<UserResource>();
