@@ -87,13 +87,13 @@ public class PostController extends Controller{
 		// Error
 		return this.getInternalServerErrorResponse(res, "There was an error. Unable to edit message");
 	}
-	public Response getMessage( String userId, String limitTo)throws SQLException {
+	public Response getMessage( String userId, int limitTo, int page)throws SQLException {
 		// Res stores body response
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		
 		// Set data in DB
 		PostDB db = new PostDB();
-		ResultSet rs= db.getPost(userId,limitTo);
+		ResultSet rs= db.getPost(userId,limitTo,page);
 		PostResource post= new PostResource();
 		if(rs.next() ){
 			// Prepare data to send back to client
@@ -108,13 +108,13 @@ public class PostController extends Controller{
 		// Error
 		return this.getInternalServerErrorResponse(res, "There was an error. Unable to get message");
 	}
-	public Response getMessageFriends( String userId, String content)throws SQLException {
+	public Response getMessageFriends( String userId, String content, int page)throws SQLException {
 		// Res stores body response
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		
 		// Set data in DB
 		PostDB db = new PostDB();
-		ResultSet rs= db.getPostFriends(userId,content);
+		ResultSet rs= db.getPostFriends(userId,content,page);
 		if(rs != null) {
 			// Array with posts
 			ArrayList<PostResource> posts = new ArrayList<PostResource>();

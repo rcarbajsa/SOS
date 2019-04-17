@@ -50,31 +50,39 @@ public class PostDB extends Conexion{
 		}
 		return -1;
 	}
-	public ResultSet getPost( String userId, String limitTo) throws SQLException {
+	public ResultSet getPost( String userId, int limitTo, int page) throws SQLException {
 		if(this.conn != null) {
 			String query = "SELECT * FROM faceSOS.posts WHERE user_id = ? ORDER BY created_at DESC ";
-			if (!limitTo.equals(""))
-				query+="LIMIT ?;";
+			query+="LIMIT ?,?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, userId);
-			if (!limitTo.equals(""))
-				ps.setString(2,limitTo);
+			int inic = page * limitTo;
+			int fin = inic + limitTo;
+			ps.setInt(2, inic);
+			ps.setInt(3, fin);
 			return ps.executeQuery();
 		}
 		return null;
 	}
-	public ResultSet getPostFriends(String userId, String content) throws SQLException {
+	public ResultSet getPostFriends(String userId, String content, int page) throws SQLException {
 		if(this.conn != null) {
 			String query = "SELECT faceSOS.posts.post_id,faceSOS.posts.user_id, faceSOS.posts.content, faceSOS.posts.created_at FROM faceSOS.posts JOIN" + 
 					" faceSOS.friends ON (faceSOS.posts.user_id=faceSOS.friends.UserID2) WHERE faceSOS.friends.UserID1= ?";
 			if(!content.equals(""))
 				query+="AND faceSOS.posts.content LIKE ?";
+			query+="LIMIT ?,?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, userId);
+			int i=2;
 			if(!content.equals("")) {
 				content="%"+content+"%";
-				ps.setString(2, content);
+				ps.setString(i, content);
+				i++;
 			}
+			int inic = page * 10;
+			int fin = inic + 10;
+			ps.setInt(i, inic);
+			ps.setInt(i + 1, fin);
 			return ps.executeQuery();
 		}
 		return null;

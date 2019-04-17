@@ -71,21 +71,17 @@ public class UserDB extends Conexion {
 			String query = "SELECT * FROM `faceSOS`.`users`";
 			if(name.equals("")) 
 				query += " WHERE name LIKE ?";
-			if(limitTo!=0)
-				query+="LIMIT ?,?";
+			query+="LIMIT ?,?";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			int i=1;
 			if(name.equals("")) {
 				ps.setString(1, "%" + name + "%");
 				i++;
 			}
-			if(limitTo != 0) {
-				int inic = page * limitTo;
-				int fin = inic + limitTo;
-				ps.setInt(i, inic);
-				ps.setInt(i + 1, fin);
-			}
-			
+			int inic = page * limitTo;
+			int fin = inic + limitTo;
+			ps.setInt(i, inic);
+			ps.setInt(i + 1, fin);
 			ResultSet rs = ps.executeQuery();
 			return rs;
 		}
@@ -99,8 +95,7 @@ public class UserDB extends Conexion {
 					+ "JOIN faceSOS.friends ON (faceSOS.users.user_id=faceSOS.friends.UserID2) where faceSOS.friends.UserID1= ? ";
 			if (!name.equals(""))
 				query += " and (faceSOS.users.name like ? or faceSOS.users.username like ?)";
-			if (count != 0)	
-				query += "limit ?,?;";
+			query += "limit ?,?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, userId);
 			int i=2;
@@ -111,13 +106,10 @@ public class UserDB extends Conexion {
 				ps.setString(i, name);
 				i++;
 			}
-			if (count != 0) {
-				int inic=page*count;
-				int fin= inic+count;
-				ps.setInt(i, inic);
-				ps.setInt(i + 1, fin);
-			}
-				
+			int inic=page*count;
+			int fin= inic+count;
+			ps.setInt(i, inic);
+			ps.setInt(i + 1, fin);				
 			ResultSet rs =ps.executeQuery();
 			return rs;
 		}
