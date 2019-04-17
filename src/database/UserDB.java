@@ -72,6 +72,7 @@ public class UserDB extends Conexion {
 		if (this.conn != null) {
 			String query = "SELECT * FROM `faceSOS`.`users`";
 			query += !(name.equals("")) ? " WHERE name LIKE ?" : "";
+			// Think about limitTo
 			query += limitTo != -1 ? " LIMIT ?,?" : "";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			int i = 1;

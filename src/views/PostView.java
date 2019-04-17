@@ -46,16 +46,20 @@ public class PostView {
 	}
 
 	@GET
-	public Response getMessage(@QueryParam("limitTo") @DefaultValue("") String limitTo,
+	public Response getMessage(
+			@QueryParam("limitTo") @DefaultValue("10") int limitTo,
+			@QueryParam("page") int page,
 			@PathParam("user_id") String userId) throws SQLException {
-		return new PostController(this.uriInfo).getMessage(userId, limitTo);
+		return new PostController(this.uriInfo).getMessage(userId,limitTo,page);
 	}
 
 	@Path("/friends")
 	@GET
-	public Response getMessageFriends(@QueryParam("content") @DefaultValue("") String content,
+	public Response getMessageFriends(
+			@QueryParam("content") @DefaultValue("") String content,
+			@QueryParam("page") int page,
 			@PathParam("user_id") String userId) throws SQLException {
-		return new PostController(this.uriInfo).getMessageFriends(userId, content);
+		return new PostController(this.uriInfo).getMessageFriends(userId,content,page);
 	}
 
 }

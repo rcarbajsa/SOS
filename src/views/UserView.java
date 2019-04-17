@@ -32,7 +32,13 @@ public class UserView {
 	}
 
 	@GET
+<<<<<<< HEAD
 	public Response getUsers(@QueryParam("limit-to") @DefaultValue(-1) int limitTo, @QueryParam("page") int page,
+=======
+	public Response getUsers(
+			@QueryParam("limit-to") @DefaultValue("10") int limitTo,
+			@QueryParam("page") int page,
+>>>>>>> 1d70bee609675aefecbd9366c7e0bf66874de3ba
 			@QueryParam("name") @DefaultValue("") String name) throws SQLException {
 		return new UserController(this.uriInfo).getUsers(name, limitTo, page);
 	}
@@ -58,9 +64,19 @@ public class UserView {
 
 	@GET
 	@Path("{userId}/friends")
+<<<<<<< HEAD
 	public Response getFriends(@PathParam("userId") String userId, @QueryParam("page") int page,
 			@QueryParam("name") @DefaultValue("") String name, @QueryParam("limit-to") @DefaultValue(-1) int limitTo)
 			throws SQLException {
 		return new UserController(this.uriInfo).getFriends(userId, name, limitTo, page);
+=======
+	public Response getFriends(
+			@PathParam("userId") String userId,
+			@QueryParam("page") int page,
+			@QueryParam("name") @DefaultValue("") String name,
+			@QueryParam("limit-to") @DefaultValue("10") int limitTo
+			) throws SQLException {
+		return new UserController(this.uriInfo).getFriends(userId, name, limitTo,page);
+>>>>>>> 1d70bee609675aefecbd9366c7e0bf66874de3ba
 	}
 }
