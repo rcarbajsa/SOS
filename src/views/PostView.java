@@ -53,8 +53,10 @@ public class PostView {
 	@Path("/friends")
 	@GET
 	public Response getFriendsPosts(@QueryParam("content") String content,
-			@PathParam("userId") String userId) throws SQLException {
-		return new PostController(this.uriInfo).getFriendsPosts(userId, content);
+			@PathParam("userId") String userId,
+			@QueryParam("limit-to") @DefaultValue("2")  int limitTo,
+			@QueryParam("page") @DefaultValue("1") int page) throws SQLException {
+		return new PostController(this.uriInfo).getFriendsPosts(userId, content, limitTo, page);
 	}
 
 }

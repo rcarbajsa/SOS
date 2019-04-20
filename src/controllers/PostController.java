@@ -107,9 +107,7 @@ public class PostController extends Controller {
         }
         user = (UserResource) ((HashMap<String, Object>) userInformation.getEntity()).get("data");
         
-        limitTo = this.getElementsPage(limitTo);
-        
-		// Set data in DB
+        // Set data in DB
 		PostDB db = new PostDB();
 		ResultSet rs = db.getPosts(user, limitTo, page - 1);
 		
@@ -126,11 +124,11 @@ public class PostController extends Controller {
 		
 		data.put("posts", posts);
 		data.put("user", user);
-		data.put("pagination", this.getPagination(null, page, posts.size() == limitTo));
+		data.put("pagination", this.getPagination(null,null, page, posts.size() == limitTo));
 		return this.getResponse(Response.Status.OK, "Post loaded succesfully", data);
 	}
 
-	public Response getFriendsPosts(String userId, String content) throws SQLException {		
+	public Response getFriendsPosts(String userId, String content, int limitTo, int page) throws SQLException {		
 		// Check that user exists
 		UserResource user = new UserResource(userId);
         Response userInformation = this.getUserInformationReponse(user);
@@ -140,7 +138,7 @@ public class PostController extends Controller {
 		
         
         PostDB db = new PostDB();
-		ResultSet rs = db.getPostFriends(user, content);
+		ResultSet rs = db.getPostFriends(user, content, limitTo, page);
 		
 		if (rs == null) {
 		  return this.getResponse(Response.Status.INTERNAL_SERVER_ERROR, "Unable to get friends information");
@@ -155,6 +153,7 @@ public class PostController extends Controller {
         data.put("user", user);
         data.put("posts", posts);
         data.put("nposts", posts.size());
+        data.put("pagination", this.getPagination(content,"content", page, posts.size() == limitTo));
         return this.getResponse(Response.Status.OK, "Data loaded succesfully", posts);
 	}
 }

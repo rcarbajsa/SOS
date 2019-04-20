@@ -25,7 +25,7 @@ public class FriendController extends Controller {
 
       // Get data from DB
       FriendDB db = new FriendDB();
-      ResultSet rs = db.getFriends(name, this.getElementsPage(limitTo), userId, page - 1);
+      ResultSet rs = db.getFriends(name, limitTo, userId, page - 1);
 
       if (rs == null) {
           return this.getResponse(Response.Status.INTERNAL_SERVER_ERROR, "Unable to get friends information");
@@ -38,7 +38,7 @@ public class FriendController extends Controller {
       HashMap<String, Object> data = new HashMap<String, Object>();
       data.put("friends", friends);
       data.put("nFriends", friends.size());
-      data.put("pagination", this.getPagination(name, page, friends.size() == limitTo));
+      data.put("pagination", this.getPagination(name, "name",page, friends.size() == limitTo));
       return this.getResponse(Response.Status.OK, "Data loaded succesfully", data);
     }
 

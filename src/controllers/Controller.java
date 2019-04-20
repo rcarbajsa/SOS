@@ -18,8 +18,7 @@ public class Controller {
 	/*****************************/
 
 	private UriInfo uriInfo;
-	private final int ELEMENTS_PAGE = 2;
-
+	
 	protected Controller(UriInfo uriInfo) {
 		this.uriInfo = uriInfo;
 	}
@@ -33,10 +32,7 @@ public class Controller {
 	    return this.uriInfo.getBaseUri().toString();
 	}
 	
-	protected int getElementsPage(int userChoice) {
-	  return userChoice != 0 ? userChoice : this.ELEMENTS_PAGE;
-	}
-
+	
 	protected Response getUserInformationReponse(UserResource user) throws SQLException {
 		UserDB db = new UserDB();
 		ResultSet rs = db.getUser(user);
@@ -77,13 +73,27 @@ public class Controller {
       return responseBuilder.build();
     }
 	
-	protected HashMap<String, Object> getPagination(String name, int page, boolean showNext) {
+	protected HashMap<String, Object> getPagination(String name, String filter, int page, boolean showNext) {
       // TODO: Think about returning next attribute when for example we have 4 rows in our DB and the 
       // limitTo is the same
       HashMap<String, Object> pagination = new HashMap<String, Object>();
       pagination.put("page", page);
-      String base = this.getPath() + "?"
-              + (name != null ? "name=" + name + "&" : "");
+      String base = this.getPath()+"?";
+      if(name!=null) {
+      	switch(filter) {
+      		case "name":
+      			base+="name="+name+"&";
+      			break;
+      		case "content":
+      			base+="content="+name+"&";
+      			break;
+      		default:
+      			base+="date="+name+"&";
+     	   
+      	}
+      }
+      else
+    	  
       if(showNext)
           pagination.put("next", base + "page=" + (page + 1));
       if(page != 1)

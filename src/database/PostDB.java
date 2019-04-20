@@ -61,14 +61,20 @@ public class PostDB extends Conexion {
 		return ps.executeQuery();
 	}
 
-	public ResultSet getPostFriends(UserResource user, String content) throws SQLException {
+	public ResultSet getPostFriends(UserResource user, String content, int limitTo, int page) throws SQLException {
 		if (this.conn != null) {
 			String query = "SELECT * FROM posts JOIN friends ON (posts.user_id = friends.user2_id) WHERE friends.user1_id= ?";
 			query += content != null ? " AND posts.content LIKE ?" : "";
+			query += "LIMIT ?,?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setInt(1, user.getId());
-			if (content != null)
-				ps.setString(2, "%" + content + "%");
+			int i=2;
+			if (content != null) {
+				ps.setString(i, "%" + content + "%");
+				i++;
+			}
+			ps.setInt(i, page * limitTo);
+			ps.setInt(i+1, page * limitTo + limitTo);
 			return ps.executeQuery();
 		}
 		return null;

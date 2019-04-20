@@ -111,7 +111,7 @@ public class UserController extends Controller {
 	public Response getUsers(String name, int limitTo, int page) throws SQLException {
 		// Get data from DB
 		UserDB db = new UserDB();
-		ResultSet rs = db.getUsers(name, this.getElementsPage(limitTo), page - 1);
+		ResultSet rs = db.getUsers(name, limitTo , page - 1);
 
 		if (rs == null) {
 	        return this.getResponse(Response.Status.INTERNAL_SERVER_ERROR, "There was a problem. Unable to get user information");
@@ -126,7 +126,7 @@ public class UserController extends Controller {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put("users", users);
 		data.put("nUsers", users.size());
-		data.put("pagination", this.getPagination(name, page, users.size() == limitTo));
+		data.put("pagination", this.getPagination(name,"name", page, users.size() == limitTo));
 
 		// Prepare data to send back to client
 		return this.getResponse(Response.Status.OK, "Data loaded succesfully", data);

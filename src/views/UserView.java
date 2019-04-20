@@ -35,7 +35,7 @@ public class UserView {
 	// TODO: Remove default Value in String name and check only with null
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response getUsers(@QueryParam("limit-to") int limitTo, 
+	public Response getUsers(@QueryParam("limit-to")@DefaultValue("2") int limitTo, 
 			@QueryParam("page") @DefaultValue("1") int page, @QueryParam("name") String name) 
 					throws SQLException {
 		return new UserController(this.uriInfo).getUsers(name, limitTo, page);
@@ -63,7 +63,7 @@ public class UserView {
 	@GET
 	@Path("{userId}/friends")
 	public Response getFriends(@PathParam("userId") String userId, @QueryParam("page") @DefaultValue("1") int page,
-			@QueryParam("name") String name, @QueryParam("limit-to") int limitTo)
+			@QueryParam("name") String name, @QueryParam("limit-to") @DefaultValue("2") int limitTo)
 			throws SQLException {
 		return new FriendController(this.uriInfo).getFriends(userId, name, limitTo, page);
 	}
