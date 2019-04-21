@@ -4,6 +4,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+
 import resources.PostResource;
 import resources.UserResource;
 
@@ -48,15 +52,33 @@ public class PostDB extends Conexion {
 		return ps.executeUpdate();
 	}
 
-	public ResultSet getPosts(UserResource user, int limitTo, int page) throws SQLException {
+	public ResultSet getPosts(UserResource user, int limitTo, int page, Date date) throws SQLException {
 	    if (this.conn == null) 
             return null;
 	    
-		String query = "SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC LIMIT ?,?;";
+		String query = "SELECT * FROM posts WHERE user_id = ? ";
+		if (date != null)
+			query+="AND updated_at BETWEEN ? AND ?";
+		query+="ORDER BY updated_at DESC LIMIT ?,?;";
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setInt(1, user.getId());
-		ps.setInt(2, page * limitTo);
-		ps.setInt(3, page * limitTo + limitTo);
+		int i = 2;
+		if (date !=null) {
+			Timestamp ts1 = new Timestamp(date.getTime());
+			System.out.println("date1:"+ts1);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			cal.add(Calendar.DATE,1);
+			date = cal.getTime();
+			ps.setTimestamp(i, ts1);
+			i++;
+			Timestamp ts2 = new Timestamp(date.getTime());
+			System.out.println("date2:"+ts2);
+			ps.setTimestamp(i, ts2);
+			i++;
+		}
+		ps.setInt(i, page * limitTo);
+		ps.setInt(i+1, page * limitTo + limitTo);
         System.out.println("pg " + page + " li" + limitTo);
 		return ps.executeQuery();
 	}

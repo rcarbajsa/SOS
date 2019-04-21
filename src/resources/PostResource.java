@@ -23,7 +23,7 @@ public class PostResource {
 	public PostResource(ResultSet rs, String baseUri) throws SQLException {
 	  this.postId = rs.getInt("post_id");
 	  this.content = rs.getString("content");
-	  this.createdAt = rs.getTimestamp("created_at");
+//	  this.createdAt = rs.getTimestamp("created_at");
 	  this.updatedAt = rs.getTimestamp("updated_at");
 	  this.location = baseUri + "user/" + rs.getInt("user_id") + "/post/" + this.postId;
 	}

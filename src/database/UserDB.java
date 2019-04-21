@@ -13,7 +13,7 @@ public class UserDB extends Conexion {
 
 	public ResultSet getUser(UserResource user) throws SQLException {
 		if (this.conn != null) {
-			String query = "SELECT * FROM users WHERE user_id = ?;";
+			String query = "SELECT * FROM faceSOS.users WHERE user_id = ?;";
 			PreparedStatement ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, user.getId());
 			ResultSet rs = ps.executeQuery();
@@ -25,7 +25,7 @@ public class UserDB extends Conexion {
 	public ResultSet createUser(UserResource user) throws SQLException {
 		// TODO: unique username value. If already exists, then error
 		if (this.conn != null) {
-			String query = "INSERT INTO users (name,username,email,biography) VALUE (?,?,?,?);";
+			String query = "INSERT INTO faceSOS.users (name,username,email,biography) VALUE (?,?,?,?);";
 			PreparedStatement ps = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getUsername());
@@ -41,7 +41,7 @@ public class UserDB extends Conexion {
 
 	public int editUser(UserResource user) throws SQLException {
 		if (this.conn != null) {
-			String query = "UPDATE users SET name = ? WHERE user_id = ?;";
+			String query = "UPDATE faceSOS.users SET name = ? WHERE user_id = ?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setString(1, user.getName());
 			ps.setInt(2, user.getId());
@@ -52,7 +52,7 @@ public class UserDB extends Conexion {
 
 	public int removeUser(UserResource user) throws SQLException {
 		if (this.conn != null) {
-			String query = "DELETE FROM users WHERE user_id = ?;";
+			String query = "DELETE FROM faceSOS.users WHERE user_id = ?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			ps.setInt(1, user.getId());
 			return ps.executeUpdate();
@@ -64,8 +64,8 @@ public class UserDB extends Conexion {
 		if (this.conn != null) {
 			boolean nameIsSet = name != null;
 			String query = nameIsSet
-					? "SELECT * FROM users WHERE name LIKE ? LIMIT ?,?" 
-					: "SELECT * FROM users LIMIT ?,?";
+					? "SELECT * FROM faceSOS.users WHERE name LIKE ? LIMIT ?,?" 
+					: "SELECT * FROM faceSOS.users LIMIT ?,?";
 			PreparedStatement ps = this.conn.prepareStatement(query);
 			
 			int i = 1;

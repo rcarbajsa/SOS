@@ -48,7 +48,8 @@ public class Cliente {
 			System.out.println("11: Añadir un amigo");
 			System.out.println("12: Eliminar un amigo");
 			System.out.println("13: Obtener los amigos de un usuario");
-			System.out.println("14: Terminar");
+			System.out.println("14: Obtener información personal de un usuario");
+			System.out.println("15: Terminar");
 			option=readInt();
 			switch(option) {
 				case 1:
@@ -100,11 +101,12 @@ public class Cliente {
 			}
 		}
 		while(option !=15);
+		System.exit(0);
 	
 	}
 	private void getUser() {
 		// TODO Auto-generated method stub
-		
+		System.out.println(this.target.path("user").path("1").request().accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
 	private void getFriends() {
 		// TODO Auto-generated method stub
@@ -128,7 +130,7 @@ public class Cliente {
 	}
 	private void getPosts() {
 		// TODO Auto-generated method stub
-		
+		System.out.println(this.target.path("user").path("1").request().accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
 	private void editarPost() {
 		// TODO Auto-generated method stub

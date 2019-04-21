@@ -2,7 +2,12 @@ package controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -99,17 +104,36 @@ public class PostController extends Controller {
         return this.getResponse(Response.Status.OK, "Post updated succesfully", post, location);
 	}
 
-	public Response getPosts(String userId, int limitTo, int page) throws SQLException {
+	public Response getPosts(String userId, int limitTo, int page, String date) throws SQLException {
+		Date d = null;
 		UserResource user = new UserResource(userId);
         Response userInformation = this.getUserInformationReponse(user);
         if(userInformation.getStatus() != 200) {
           return userInformation;
         }
+        if(!date.equals("")) {
+        	DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        	try {
+				d = df.parse(date);
+				
+			} catch (ParseException e) {
+				System.out.println("Date formate is not correct");
+				System.out.println("Should be dd-MM-yyyy");
+				}
+//        	try {
+//        	Timestamp ts = Timestamp.valueOf(date);
+//        	System.out.println(ts);
+//        	}
+//        	catch(java.lang.IllegalArgumentException e) {
+//        		System.out.println("Date formate is not correct");
+//				System.out.println("Should be yyyy-MM-dd");
+//				}
+        }
         user = (UserResource) ((HashMap<String, Object>) userInformation.getEntity()).get("data");
         
         // Set data in DB
 		PostDB db = new PostDB();
-		ResultSet rs = db.getPosts(user, limitTo, page - 1);
+		ResultSet rs = db.getPosts(user, limitTo, page - 1, d);
 		
 		if (rs == null) {
 		    // Error

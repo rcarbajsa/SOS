@@ -45,9 +45,9 @@ public class PostView {
 	}
 
 	@GET
-	public Response getPosts(@QueryParam("limit-to") int limitTo,
-			@PathParam("userId") String userId, @QueryParam("page") @DefaultValue("1") int page) throws SQLException {
-		return new PostController(this.uriInfo).getPosts(userId, limitTo, page);
+	public Response getPosts(@QueryParam("limit-to") @DefaultValue("2") int limitTo,
+			@PathParam("userId") String userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("date") @DefaultValue("") String date) throws SQLException {
+		return new PostController(this.uriInfo).getPosts(userId, limitTo, page, date);
 	}
 
 	@Path("/friends")

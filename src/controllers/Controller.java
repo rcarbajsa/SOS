@@ -43,9 +43,10 @@ public class Controller {
 		} else {
 			// Prepare data to send back to client
 			user.setName(rs.getString("name"));
-			user.setUsername(rs.getString("username"));
+			user.setUsername(rs.getString("username")); 
 			user.setEmail(rs.getString("email"));
-			user.setCreatedAt(rs.getTimestamp("created_at"));
+			
+			user.setUpdatedAt(rs.getTimestamp("updated_at"));
 			user.setBiography(rs.getString("biography"));
 			return this.getResponse(Response.Status.OK, "Data loaded succesfully", user);
 		}
@@ -92,7 +93,6 @@ public class Controller {
      	   
       	}
       }
-      else
     	  
       if(showNext)
           pagination.put("next", base + "page=" + (page + 1));

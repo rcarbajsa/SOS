@@ -132,7 +132,7 @@ public class UserResource {
 		this.createdAt = createdAt;
 	}
 	
-	public void seUpdatedAt(Timestamp updatedAt) {
+	public void setUpdatedAt(Timestamp updatedAt) {
       this.updatedAt = updatedAt;
     }
 
