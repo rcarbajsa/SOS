@@ -14,9 +14,9 @@ public class FriendDB extends Conexion {
 	public ResultSet getFriends(String name, int count, String userId, int page) throws SQLException {
       if (this.conn != null) {
           boolean nameIsSet = name != null;
-          String query = "SELECT friends.*, users.* FROM users " + 
-              "JOIN friends ON (users.user_id = friends.user2_id) WHERE friends.user1_id = ?";
-          query += nameIsSet ? " AND (users.name like ? or users.username LIKE ?)" : "";
+          String query = "SELECT faceSOS.friends.*, faceSOS.users.* FROM faceSOS.users " + 
+              "JOIN faceSOS.friends ON (faceSOS.users.user_id = faceSOS.friends.user2_id) WHERE faceSOS.friends.user1_id = ?";
+          query += nameIsSet ? " AND (faceSOS.users.name like ? or faceSOS.users.username LIKE ?)" : "";
           query += " LIMIT ?,?;";
           PreparedStatement ps = this.conn.prepareStatement(query);
           ps.setString(1, userId);
@@ -43,7 +43,7 @@ public class FriendDB extends Conexion {
 	    if(this.conn == null)
 	        return -1;
 	    
-	    String query = "INSERT IGNORE INTO friends (user1_id,user2_id) VALUES (?,?);";
+	    String query = "INSERT IGNORE INTO faceSOS.friends (user1_id,user2_id) VALUES (?,?);";
 	    PreparedStatement ps = this.conn.prepareStatement(query);
 	    // Max likes this
 		ps.setInt(1, idUser);
@@ -58,14 +58,14 @@ public class FriendDB extends Conexion {
 	public int removeFriend(UserResource friend1, UserResource friend2) throws SQLException {
 	    if(this.conn == null)
             return -1;
-		// this remove the two rows??
-		String query = "DELETE FROM friends WHERE (user1_id = ? AND user2_id = ?) OR (user2_id = ? AND user1_id = ?);";
+		String query = "DELETE FROM faceSOS.friends WHERE (user1_id = ? AND user2_id = ?);";
 		PreparedStatement ps = this.conn.prepareStatement(query);
 		ps.setInt(1, friend1.getId());
 		ps.setInt(2, friend2.getId());
-		ps.setInt(4, friend1.getId());
-		ps.setInt(3, friend2.getId());
+		ps.executeUpdate();
+		query = "DELETE FROM faceSOS.friends WHERE (user1_id = ? AND user2_id = ?);";
+		ps.setInt(1, friend2.getId());
+		ps.setInt(2, friend1.getId());
 		return ps.executeUpdate();
-
 	}
 }

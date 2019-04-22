@@ -7,6 +7,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import views.*;
@@ -14,7 +15,7 @@ import resources.*;
 import org.apache.tomcat.jni.Buffer;
 import org.glassfish.jersey.client.ClientConfig;
 
-import com.mysql.fabric.Response;
+import com.google.gson.Gson;
 
 public class Cliente {
 	private ClientConfig config;
@@ -62,7 +63,7 @@ public class Cliente {
 					editarUsuario();
 					break;
 				case 4:
-					getUsuarios();
+					getUsers();
 					break;
 				case 5:
 					crearPost();
@@ -104,72 +105,117 @@ public class Cliente {
 		System.exit(0);
 	
 	}
+	private void getUsers() {
+		System.out.println(this.target.path("user").request().accept(MediaType.APPLICATION_JSON).get(String.class));
+	}
 	private void getUser() {
 		// TODO Auto-generated method stub
 		System.out.println(this.target.path("user").path("1").request().accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
 	private void getFriends() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(this.target.path("user").path("1").path("friends").request().accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
 	private void eliminarAmigo() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(this.target.path("user").path("2").path("friends").path("3").request().accept(MediaType.APPLICATION_JSON).delete());
 	}
 	private void añadirAmigo() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(this.target.path("user").path("2").path("friends").path("3").request().accept(MediaType.APPLICATION_JSON).post(null));
 	}
-	private void enviarChat() {
-		// TODO Auto-generated method stub
-		
+	private void enviarChat() throws IOException {
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("Introduzca contenido: \n> ");
+		String content = buffer.readLine();
+		PostResource post = new PostResource(content);
+		System.out.println(post.getContent());
+		Response res = this.target.path("user").path("chat").path("post").path("4").queryParam("from", "3").queryParam("to","4")
+				.request().
+				accept(MediaType.APPLICATION_JSON).put(Entity.json(post), Response.class);
+		System.out.println(res.getStatus());
+		System.out.println(res);
 	}
 	private void getFriendsPosts() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(this.target.path("user").path("1").path("posts").path("friends").request().accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
 	private void getPosts() {
-		// TODO Auto-generated method stub
-		System.out.println(this.target.path("user").path("1").request().accept(MediaType.APPLICATION_JSON).get(String.class));
+		System.out.println(this.target.path("user").path("1").path("posts").request().accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
-	private void editarPost() {
-		// TODO Auto-generated method stub
-		
+	private void editarPost() throws IOException {
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("Introduzca contenido: \n> ");
+		String content = buffer.readLine();
+		PostResource post = new PostResource(content);
+		System.out.println(post.getContent());
+		Response res = this.target.path("user").path("4").path("post").path("6").request().
+				accept(MediaType.APPLICATION_JSON).put(Entity.json(post), Response.class);
+		System.out.println(res.getStatus());
+		System.out.println(res);
 	}
 	private void eliminarPost() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(this.target.path("user").path("4").path("post").path("5").request().accept(MediaType.APPLICATION_JSON).delete(String.class));
 	}
-	private void crearPost() {
-		// TODO Auto-generated method stub
-		
+	private void crearPost() throws IOException {
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("Introduzca contenido: \n> ");
+		String content = buffer.readLine();
+		PostResource post = new PostResource();
+		post.setContent(content);
+		System.out.println(post.getContent());
+		System.out.println(post.getContent());
+		String json = new Gson().toJson(post);
+		System.out.println(json);
+		Response res = this.target.path("user").path("4").path("post").request().
+				accept(MediaType.APPLICATION_JSON).post(Entity.json(json), Response.class);
+		System.out.println(res.getStatus());
+		System.out.println(res);
+	
 	}
-	private void getUsuarios() {
-		// TODO Auto-generated method stub
-		
-	}
-	private void editarUsuario() {
-		// TODO Auto-generated method stub
+	
+	private void editarUsuario() throws IOException {
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("Introduzca username: \n> ");
+		String username = buffer.readLine();
+		System.out.print("Introduzca name: \n> ");
+		String name = buffer.readLine();
+		System.out.print("Introduzca email: \n> ");
+		String email = buffer.readLine();
+		System.out.print("Introduzca biography: \n> ");
+		String bio = buffer.readLine();
+		UserResource user= new UserResource(username, name, email, bio);
+//		user.setUsername("a");
+//		user.setName("a");
+//		user.setBiography("a");
+//		user.setEmail("a");
+		Response res = this.target.path("user").path("2").request().accept(MediaType.APPLICATION_JSON).put(Entity.json(user), Response.class);
+		System.out.println(res.getStatus());
+		System.out.println(res);
 		
 	}
 	private void eliminarUsuario() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(this.target.path("user").path("7").request().accept(MediaType.APPLICATION_JSON).delete(String.class));
 	}
 	private void crearUsuario() throws SQLException, IOException {
-		UserResource user= new UserResource();
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Introduzca username:");
-		user.setUsername(buffer.readLine());
-		System.out.println("Introduzca name:");
-		user.setName(buffer.readLine());
+		System.out.print("Introduzca username: ");
+		String username = buffer.readLine();
+		System.out.print("Introduzca name; ");
+		String name = buffer.readLine();
+		System.out.print("Introduzca email: ");
+		String email = buffer.readLine();
+		System.out.print("Introduzca biography; ");
+		String bio = buffer.readLine();
+		UserResource user= new UserResource(username, name, email, bio);
+//		user.setUsername("a");
+//		user.setName("a");
+//		user.setBiography("a");
+//		user.setEmail("a");
 		Response res = this.target.path("user").request().accept(MediaType.APPLICATION_JSON).post(Entity.json(user), Response.class);
+		System.out.println(res.getStatus());
 		System.out.println(res);
 		
 		
 	}
 	private static int readInt() throws NumberFormatException, IOException {
-		System.out.println(">");
+		System.out.print("> ");
 		return Integer.parseInt(new BufferedReader(
 				new InputStreamReader(System.in)).readLine());
 	}

@@ -71,7 +71,9 @@ public class FriendController extends Controller {
 		}
 
 		FriendDB db = new FriendDB();
-		if (db.removeFriend(friend1, friend2) > 0) {
+		int res = db.removeFriend(friend1, friend2);
+		System.out.println(res);
+		if ( res <= 0) {
 		    return this.getResponse(Response.Status.INTERNAL_SERVER_ERROR, "Unable to remove friend");
 		}
 		

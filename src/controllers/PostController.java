@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import database.PostDB;
 import resources.PostResource;
+import resources.Posts;
 import resources.UserResource;
 
 public class PostController extends Controller {
@@ -56,7 +57,7 @@ public class PostController extends Controller {
 	}
 
 	public Response deletePost(String userId, String postId) throws SQLException {
-		PostResource post = new PostResource(postId);
+		PostResource post = new PostResource();
 		
 		UserResource user = new UserResource(userId);
         Response userInformation = this.getUserInformationReponse(user);
@@ -64,11 +65,10 @@ public class PostController extends Controller {
           return userInformation;
         }
         user = (UserResource) ((HashMap<String, Object>) userInformation.getEntity()).get("data");
-        
+        // Set data in DB
         post.setUser(user);
-        
-		// Set data in DB
-		PostDB db = new PostDB();
+        post.setPostId(postId);
+        PostDB db = new PostDB();
 		int affectedRows = db.deletePost(post);
 
 		if (affectedRows <= 0) {
@@ -141,7 +141,8 @@ public class PostController extends Controller {
 		}
 		
 		HashMap<String, Object> data = new HashMap<String, Object>();
-		ArrayList<PostResource> posts = new ArrayList<PostResource>();
+		Posts p = new Posts();
+		ArrayList<PostResource> posts = p.getPosts();
 
 		while(rs.next())
 		    posts.add(new PostResource(rs, this.getBaseUri()));

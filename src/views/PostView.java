@@ -9,6 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -45,8 +46,10 @@ public class PostView {
 	}
 
 	@GET
+	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	public Response getPosts(@QueryParam("limit-to") @DefaultValue("2") int limitTo,
-			@PathParam("userId") String userId, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("date") @DefaultValue("") String date) throws SQLException {
+			@PathParam("userId") String userId, @QueryParam("page") @DefaultValue("1") int page,
+			 @QueryParam("date") @DefaultValue("") String date) throws SQLException {
 		return new PostController(this.uriInfo).getPosts(userId, limitTo, page, date);
 	}
 

@@ -37,6 +37,12 @@ public class UserResource {
       this.userId = userId;
       this.location = location + "/user/" + this.userId;
     }
+	public UserResource(String username, String name,String email, String bio) {
+		this.username = username;
+		this.name = name;
+		this.biography = bio;
+		this.email = email;
+	}
 
 	public UserResource(int userId, String name, String username, String email, String biography, String location,
 			Timestamp createdAt,Timestamp updatedAt) {
@@ -59,7 +65,7 @@ public class UserResource {
       this.biography = rs.getString("biography");
       this.location = domain + "user/" + this.getId();
       this.friendsLocation = this.location + "/friends";
-      this.createdAt = rs.getTimestamp("created_at");
+//      this.createdAt = rs.getTimestamp("created_at");
       this.updatedAt = rs.getTimestamp("updated_at");
 	}
 
@@ -102,7 +108,7 @@ public class UserResource {
 
 	public void setUserId(String userId) {
 		this.userId = Integer.parseInt(userId);
-	}
+		}
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -148,4 +154,13 @@ public class UserResource {
 			this.name = user.getName();
 		}
 	}
+	
+	public void content() {
+		System.out.println(this.userId);
+		System.out.println(this.biography);
+		System.out.println(this.email);
+		System.out.println(this.name);
+		System.out.println(this.username);
+		System.out.println(this.location);
+		}
 }

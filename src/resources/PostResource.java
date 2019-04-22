@@ -4,6 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement(name = "post")
+
 public class PostResource {
 	private int postId;
 	private UserResource user;
@@ -31,7 +35,7 @@ public class PostResource {
 	public PostResource(String content) {
 		this.content = content;
 	}
-
+	@XmlAttribute(required=false)
 	public int getPostId() {
 		return this.postId;
 	}
