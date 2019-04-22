@@ -85,4 +85,11 @@ public class UserView {
             throws SQLException {
         return new FriendController(this.uriInfo).removeFriend(idUser, idFriend);
     }
+    @GET
+	@Path("{userId}/app")
+	public Response getUserApp(@PathParam("userId") String userId)
+			throws SQLException {
+		return new UserController(this.uriInfo).getUserApp(userId);
+	}
+    
 }

@@ -34,11 +34,11 @@ public class FriendController extends Controller {
       ArrayList<UserResource> friends = new ArrayList<UserResource>();
       while (rs.next())
           friends.add(new UserResource(rs.getInt("user2_id"), rs, this.getBaseUri()));
-
+      int nFriends = this.getUserNumberFriends(user);
       HashMap<String, Object> data = new HashMap<String, Object>();
       data.put("friends", friends);
-      data.put("nFriends", friends.size());
-      data.put("pagination", this.getPagination(name, "name",page, friends.size() == limitTo));
+      data.put("nFriends", nFriends);
+      data.put("pagination", this.getPagination(name, "name",page, nFriends > limitTo));
       return this.getResponse(Response.Status.OK, "Data loaded succesfully", data);
     }
 
@@ -52,7 +52,7 @@ public class FriendController extends Controller {
 		
 		FriendDB db = new FriendDB();
 		if (db.addFriend(friend1.getId(), friend2.getId()) <= 0) {
-		  return this.getResponse(Response.Status.INTERNAL_SERVER_ERROR, "Unable to create friendship");
+		  return this.getResponse(Response.Status.OK, "Friendship already exist");
 		}
 		
 		ArrayList<UserResource> friends = new ArrayList<UserResource>();
@@ -71,10 +71,8 @@ public class FriendController extends Controller {
 		}
 
 		FriendDB db = new FriendDB();
-		int res = db.removeFriend(friend1, friend2);
-		System.out.println(res);
-		if ( res <= 0) {
-		    return this.getResponse(Response.Status.INTERNAL_SERVER_ERROR, "Unable to remove friend");
+		if ( db.removeFriend(friend1, friend2) <= 0) {
+		    return this.getResponse(Response.Status.OK, "Friendship does not exist");
 		}
 		
 		friend1.setFriendsLocation(this.getBaseUri() + "/friends");

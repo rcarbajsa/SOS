@@ -18,6 +18,13 @@ public class PostResource {
 
 	public PostResource() {
 	}
+	public PostResource(int id, ResultSet rs, String domain) throws SQLException {
+		  this.postId = id;
+		  this.content = rs.getString("content");
+		  this.location = domain + "post/" + this.getPostId();
+//	      this.createdAt = rs.getTimestamp("created_at");
+	      this.updatedAt = rs.getTimestamp("updated_at");
+		}
 
 	public PostResource(String postId, String userId) {
 		this.postId = Integer.parseInt(postId);

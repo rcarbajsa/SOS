@@ -79,4 +79,14 @@ public class UserDB extends Conexion {
 		}
 		return null;
 	}
+
+	public ResultSet getUserNumberFriends(UserResource user) throws SQLException {
+		if (this.conn != null) {
+			String query = "SELECT COUNT(user1_id) FROM faceSOS.friends WHERE user1_id = ?;";
+			PreparedStatement ps = this.conn.prepareStatement(query);
+			ps.setInt(1, user.getId());
+			return ps.executeQuery();
+		}
+		return null;
+	}
 }

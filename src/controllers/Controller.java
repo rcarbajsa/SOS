@@ -9,14 +9,11 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import database.UserDB;
 import resources.UserResource;
+import database.FriendDB;
+
 
 public class Controller {
-	/*****************************/
-	// TODO: Check codes. Right now, we have:
-	// PUT and POST return CREATED => 201
-	// GET and DELETE return OK => 200
-	/*****************************/
-
+	
 	private UriInfo uriInfo;
 	
 	protected Controller(UriInfo uriInfo) {
@@ -51,7 +48,18 @@ public class Controller {
 			return this.getResponse(Response.Status.OK, "Data loaded succesfully", user);
 		}
 	}
-
+	/*
+	 * Get number of friends of an user
+	 */
+	protected int getUserNumberFriends(UserResource user) throws SQLException {
+		
+		UserDB db = new UserDB();
+		ResultSet rs = db.getUserNumberFriends(user);
+		if(rs.next()) 
+			return rs.getInt(1);
+		
+		return -1;
+	}
 	/*
 	 * Add error message to response
 	 */

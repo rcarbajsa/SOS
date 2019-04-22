@@ -77,7 +77,7 @@ public class PostDB extends Conexion {
 
 	public ResultSet getPostFriends(UserResource user, String content, int limitTo, int page) throws SQLException {
 		if (this.conn != null) {
-			String query = "SELECT * FROM faceSOS.posts JOIN faceSOS.friends ON (posts.user_id = friends.user2_id) WHERE faceSOS.friends.user1_id= ?";
+			String query = "SELECT * FROM faceSOS.posts JOIN faceSOS.friends ON (posts.user_id = friends.user2_id) WHERE faceSOS.friends.user1_id= ? ";
 			query += content != null ? " AND faceSOS.posts.content LIKE ?" : "";
 			query += "LIMIT ?,?;";
 			PreparedStatement ps = this.conn.prepareStatement(query);

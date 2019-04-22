@@ -149,7 +149,7 @@ public class PostController extends Controller {
 		
 		data.put("posts", posts);
 		data.put("user", user);
-		data.put("pagination", this.getPagination(null,null, page, posts.size() == limitTo));
+		data.put("pagination", this.getPagination(null,null, page, posts.size() > limitTo));
 		return this.getResponse(Response.Status.OK, "Post loaded succesfully", data);
 	}
 

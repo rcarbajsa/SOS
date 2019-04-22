@@ -27,7 +27,6 @@ public class Cliente {
 		this.target=this.client.target(getBaseURI());
 	}
 	public static void main(String[] args) throws SQLException, NumberFormatException, IOException {
-		// TODO Auto-generated method stub
 				new Cliente().init();
 			
 	}
@@ -113,13 +112,13 @@ public class Cliente {
 		System.out.println(this.target.path("user").path("1").request().accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
 	private void getFriends() {
-		System.out.println(this.target.path("user").path("1").path("friends").request().accept(MediaType.APPLICATION_JSON).get(String.class));
+		System.out.println(this.target.path("user").path("2").path("friends").request().accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
 	private void eliminarAmigo() {
-		System.out.println(this.target.path("user").path("2").path("friends").path("3").request().accept(MediaType.APPLICATION_JSON).delete());
+		System.out.println(this.target.path("user").path("2").path("friends").path("4").request().accept(MediaType.APPLICATION_JSON).delete());
 	}
 	private void añadirAmigo() {
-		System.out.println(this.target.path("user").path("2").path("friends").path("3").request().accept(MediaType.APPLICATION_JSON).post(null));
+		System.out.println(this.target.path("user").path("2").path("friends").path("6").request().accept(MediaType.APPLICATION_JSON).post(null));
 	}
 	private void enviarChat() throws IOException {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
@@ -129,8 +128,7 @@ public class Cliente {
 		post.setContent(content);
 		System.out.println(post.getContent());
 		Response res = this.target.path("user").path("chat").queryParam("from", "3").queryParam("to","4")
-				.request().
-				accept(MediaType.APPLICATION_JSON).post(Entity.json(post), Response.class);
+				.request().accept(MediaType.APPLICATION_JSON).post(Entity.json(post), Response.class);
 		System.out.println(res.getStatus());
 		System.out.println(res);
 	}
@@ -159,7 +157,7 @@ public class Cliente {
 		String content = buffer.readLine();
 		PostResource post = new PostResource(content);
 		System.out.println(post.getContent());
-		Response res = this.target.path("user").path("4").path("post").request().
+		Response res = this.target.path("user").path("3").path("post").request().
 				accept(MediaType.APPLICATION_JSON).post(Entity.json(post), Response.class);
 		System.out.println(res);
 	
@@ -190,19 +188,15 @@ public class Cliente {
 	}
 	private void crearUsuario() throws SQLException, IOException {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("Introduzca username: ");
+		System.out.print("Introduzca username: \n> ");
 		String username = buffer.readLine();
-		System.out.print("Introduzca name; ");
+		System.out.print("Introduzca name: \n> ");
 		String name = buffer.readLine();
-		System.out.print("Introduzca email: ");
+		System.out.print("Introduzca email: \n> ");
 		String email = buffer.readLine();
-		System.out.print("Introduzca biography; ");
+		System.out.print("Introduzca biography: \n> ");
 		String bio = buffer.readLine();
 		UserResource user= new UserResource(username, name, email, bio);
-//		user.setUsername("a");
-//		user.setName("a");
-//		user.setBiography("a");
-//		user.setEmail("a");
 		Response res = this.target.path("user").request().accept(MediaType.APPLICATION_JSON).post(Entity.json(user), Response.class);
 		System.out.println(res.getStatus());
 		System.out.println(res);
