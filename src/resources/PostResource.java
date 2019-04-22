@@ -35,6 +35,12 @@ public class PostResource {
 	public PostResource(String content) {
 		this.content = content;
 	}
+	public PostResource(int postId) {
+		this.postId = postId;
+	}
+	
+	
+	
 	@XmlAttribute(required=false)
 	public int getPostId() {
 		return this.postId;
@@ -63,7 +69,10 @@ public class PostResource {
 	public void setPostId(String postId) {
 		this.postId = Integer.parseInt(postId);
 	}
-
+	public void setPostId(int postId) {
+		this.postId = (postId);
+	}
+	
 	public void setUser(UserResource user) {
 		this.user = user;
 	}

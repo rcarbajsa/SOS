@@ -27,6 +27,9 @@ public class PostView {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPost(@PathParam("userId") String userId, PostResource post) throws SQLException {
+		System.out.println(post.getPostId());
+		System.out.println(post.getContent());
+		//System.out.println(post.ge);
 		return new PostController(this.uriInfo).createPost(post, userId);
 	}
 

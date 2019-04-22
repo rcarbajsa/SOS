@@ -125,11 +125,12 @@ public class Cliente {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		System.out.print("Introduzca contenido: \n> ");
 		String content = buffer.readLine();
-		PostResource post = new PostResource(content);
+		PostResource post = new PostResource();
+		post.setContent(content);
 		System.out.println(post.getContent());
-		Response res = this.target.path("user").path("chat").path("post").path("4").queryParam("from", "3").queryParam("to","4")
+		Response res = this.target.path("user").path("chat").queryParam("from", "3").queryParam("to","4")
 				.request().
-				accept(MediaType.APPLICATION_JSON).put(Entity.json(post), Response.class);
+				accept(MediaType.APPLICATION_JSON).post(Entity.json(post), Response.class);
 		System.out.println(res.getStatus());
 		System.out.println(res);
 	}
@@ -147,7 +148,6 @@ public class Cliente {
 		System.out.println(post.getContent());
 		Response res = this.target.path("user").path("4").path("post").path("6").request().
 				accept(MediaType.APPLICATION_JSON).put(Entity.json(post), Response.class);
-		System.out.println(res.getStatus());
 		System.out.println(res);
 	}
 	private void eliminarPost() {
@@ -157,15 +157,10 @@ public class Cliente {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		System.out.print("Introduzca contenido: \n> ");
 		String content = buffer.readLine();
-		PostResource post = new PostResource();
-		post.setContent(content);
+		PostResource post = new PostResource(content);
 		System.out.println(post.getContent());
-		System.out.println(post.getContent());
-		String json = new Gson().toJson(post);
-		System.out.println(json);
 		Response res = this.target.path("user").path("4").path("post").request().
-				accept(MediaType.APPLICATION_JSON).post(Entity.json(json), Response.class);
-		System.out.println(res.getStatus());
+				accept(MediaType.APPLICATION_JSON).post(Entity.json(post), Response.class);
 		System.out.println(res);
 	
 	}

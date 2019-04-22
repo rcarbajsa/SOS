@@ -79,7 +79,7 @@ public class PostController extends Controller {
 
 	public Response editPost(PostResource post, String postId, String userId) throws SQLException {
 		post.setPostId(postId);
-
+		System.out.println(userId);
 		UserResource user = new UserResource(userId);
         Response userInformation = this.getUserInformationReponse(user);
         if(userInformation.getStatus() != 200) {
